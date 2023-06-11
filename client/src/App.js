@@ -1,25 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
+import {AppNavbar} from "./components/common/AppNavbar";
+import {EmployeeDirectory} from "./components/employees/EmployeeDirectory";
+import {useEffect, useState} from "react";
+import {getEmployees} from "./data/datastore";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  let [result, setResult] = useState([]);
+  useEffect(() => {
+    getEmployees().then(resp => {
+      resp.json().then(data => {
+        setResult(data);
+      });
+    });
+  }, []);
+  return (<>
+    <AppNavbar />
+    <div className="container py-5">
+      <EmployeeDirectory employees={result} />
     </div>
-  );
+  </>);
 }
 
 export default App;
