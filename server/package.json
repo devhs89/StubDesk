@@ -1,14 +1,22 @@
 {
-  "name": "server",
-  "version": "0.0.0",
+  "name": "stub-desk-server",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon -L server.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.6",
-    "debug": "~4.3.4",
+    "dotenv": "^16.1.4",
     "express": "~4.18.2",
+    "mongoose": "^7.2.3",
     "morgan": "~1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "nodemonConfig": {
+    "verbose": true,
+    "ext": "js, json, jsx, ts, tsx, env"
   }
 }
