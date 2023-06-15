@@ -19,7 +19,6 @@ export const EmployeeDirectory = (props) => {
   };
 
   return (<div>
-    <h1 className={"mb-3"}>Employee Directory</h1>
     <div className="row mb-3">
       <div className="col-auto">
         <Button className={"btn px-5 " + (searchEmpState ? 'btn-danger' : 'btn-primary')}
@@ -30,6 +29,7 @@ export const EmployeeDirectory = (props) => {
                 onClick={addEmpClickHandler}>{addEmpState ? 'Cancel' : 'Add'}</Button>
       </div>
     </div>
+    <hr />
     {searchEmpState && <EmployeeSearch />}
     {addEmpState && <EmployeeCreate />}
     {!searchEmpState && !addEmpState && <EmployeeTable employees={props.employees} />}

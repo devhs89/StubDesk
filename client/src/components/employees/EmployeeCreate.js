@@ -85,6 +85,7 @@ export const EmployeeCreate = () => {
   };
 
   return (<div className={"mb-3"}>
+    <h1 className={"mb-3"}>Add Employee</h1>
     {formErrors.length > 0 && <div className={"bg-secondary-subtle py-2 px-3 rounded border mb-3 text-danger"}>
       {formErrors.map((msg, dex) => (
         <div className={"w-100"} key={dex}><span className={"me-2"}>&#33;</span>{msg}</div>))}
@@ -152,7 +153,7 @@ export const EmployeeCreate = () => {
         </div>
       </div>
       <div className={"col-12 mb-3"}>
-        <Button className={"btn btn-primary px-5"} type={"button"} onClick={createEmployeeRequest}>Submit</Button>
+        <Button className={"btn btn-primary px-5"} type={"button"} onClick={createEmployeeRequest}>Create</Button>
       </div>
     </form>
   </div>);
