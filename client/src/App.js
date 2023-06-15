@@ -9,11 +9,7 @@ function App() {
   const [showHomePage, setShowHomePage] = useState(true);
   let [result, setResult] = useState([]);
   useEffect(() => {
-    getEmployees().then(resp => {
-      resp.json().then(data => {
-        setResult(data);
-      });
-    });
+    getEmployees().then(resp => setResult(resp.data.getEmployees));
   }, []);
   return (<>
     <AppNavbar />
