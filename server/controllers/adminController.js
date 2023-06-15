@@ -1,6 +1,5 @@
-const employeeModel = require("../models/employeeModel");
+const EmployeeModel = require("../models/EmployeeModel");
 const validators = require("../helpers/validators");
-const EmployeeModel = require("../models/employeeModel");
 
 const createEmployee = async (req, res, next) => {
   const errorsList = [];
@@ -16,7 +15,7 @@ const createEmployee = async (req, res, next) => {
     if (!validators.validCurrentStatus(payload.currentStatus)) errorsList.push('Invalid current status.');
     if (errorsList.length > 0) return res.status(400).send(errorsList);
 
-    const dc = await employeeModel.create(payload);
+    const dc = await EmployeeModel.create(payload);
     dc instanceof EmployeeModel ? res.sendStatus(200) : res.sendStatus(500);
   } catch (e) {
     next(e.message);
@@ -24,7 +23,7 @@ const createEmployee = async (req, res, next) => {
 };
 
 const showEmployees = async (req, res) => {
-  const employees = await employeeModel.find({}).exec();
+  const employees = await EmployeeModel.find({}).exec();
   try {
     res.send(employees);
   } catch (e) {
