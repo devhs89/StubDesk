@@ -1,16 +1,14 @@
 import './App.css';
 import {AppNavbar} from "./components/common/AppNavbar";
 import {EmployeeDirectory} from "./components/employees/EmployeeDirectory";
-import {useEffect, useState} from "react";
-import {getEmployees} from "./data/datastore";
+import {useState} from "react";
+import {getEmployeesQuery} from "./graphql/queries";
 import Button from "react-bootstrap/Button";
+import {useQuery} from "@apollo/client";
 
 function App() {
   const [showHomePage, setShowHomePage] = useState(true);
-  let [result, setResult] = useState([]);
-  useEffect(() => {
-    getEmployees().then(resp => setResult(resp.data.getEmployees));
-  }, []);
+  const {qLoading, error, data} = useQuery(getEmployeesQuery);
   return (<>
     <AppNavbar />
     <div className="container py-5">
@@ -18,11 +16,13 @@ function App() {
         <div className={"flex-grow-1 m-auto text-center"}>
           <h1>Welcome</h1>
           <p>Click the button below to navigate to employee directory.</p>
-          <Button className={"btn btn-lg btn-primary px-5"}
+          {qLoading && <p>Loading...</p>}
+          {error && <p>Error : {error.message}</p>}
+          <Button className={`btn btn-lg btn-primary px-5 ${qLoading ? 'disabled' : ''}`} disabled={qLoading}
                   onClick={() => setShowHomePage(false)}>View Employees</Button>
         </div>
       </div>}
-      {!showHomePage && <EmployeeDirectory employees={result} />}
+      {!showHomePage && <EmployeeDirectory employees={data.getEmployees} />}
     </div>
   </>);
 }

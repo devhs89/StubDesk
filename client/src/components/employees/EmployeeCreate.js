@@ -1,10 +1,10 @@
 import Button from "react-bootstrap/Button";
-import {useCallback, useState} from "react";
+import {useState} from "react";
 import {employee} from "../../dtos/employee";
-import {createEmployee} from "../../data/datastore";
+import {useMutation} from "@apollo/client";
+import {createEmployeeMutation} from "../../graphql/queries";
 
 export const EmployeeCreate = () => {
-  const [formEle, setFormEle] = useState(null);
   const [formErrors, setFormErrors] = useState([]);
   const [formSuccess, setFormSuccess] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -15,6 +15,8 @@ export const EmployeeCreate = () => {
   const [employeeType, setEmployeeType] = useState("seasonal");
   const [hireDate, setHireDate] = useState(new Date());
   const [currentStatus, setCurrentStatus] = useState(false);
+
+  const scrollToTop = () => window.scrollTo(0, 0);
 
   const changeHandler = (id, val) => {
     switch (id) {
@@ -37,7 +39,7 @@ export const EmployeeCreate = () => {
         setEmployeeType(val);
         break;
       case "hireDate":
-        setHireDate(val);
+        setHireDate(new Date(val));
         break;
       case "currentStatus":
         setCurrentStatus(val);
@@ -47,24 +49,24 @@ export const EmployeeCreate = () => {
     }
   };
 
-  const createEmployeeRequest = useCallback(() => {
+  const [createEmployee, {_, mLoading, error}] = useMutation(createEmployeeMutation);
+
+  const createEmployeeRequest = (evt) => {
+    evt.preventDefault();
+
     employee.firstName = firstName;
     employee.lastName = lastName;
     employee.age = age;
     employee.jobTitle = jobTitle;
     employee.department = department;
     employee.employeeType = employeeType;
-    employee.hireDate = hireDate;
-    employee.currentStatus = (currentStatus === true || currentStatus.toString() === 'on') ? 'on' : 'off';
+    employee.hireDate = hireDate.toISOString().slice(0, 10);
+    employee.currentStatus = currentStatus ? 'retired' : 'working';
 
-    createEmployee(employee).then(resp => {
-      if (resp.status >= 400 && resp.status <= 499) {
-        setFormSuccess("");
-        resp.json().then(dt => setFormErrors(dt));
-      } else if (resp.status >= 500) {
-        setFormSuccess("");
-        setFormErrors([resp.statusText]);
-      } else {
+    createEmployee({
+      variables: {payload: JSON.stringify(employee)}
+    }).then(resp => {
+      if (resp?.data?.addEmployee?.firstName) {
         setFormErrors([]);
         setFormSuccess("Employee created");
         setFirstName("");
@@ -75,13 +77,28 @@ export const EmployeeCreate = () => {
         setEmployeeType("seasonal");
         setHireDate(new Date());
         setCurrentStatus(false);
-        clearForm(formEle);
+        evt.target.reset();
+      } else {
+        if (error) {
+          setFormErrors([error]);
+          setFormSuccess('');
+        } else {
+          setFormErrors(["Internal server error"]);
+          setFormSuccess('');
+        }
       }
+      scrollToTop();
+    }).catch(err => {
+      try {
+        const el = JSON.parse(err.message).message;
+        setFormErrors(el);
+        setFormSuccess('');
+      } catch (e) {
+        setFormErrors(["Internal server error"]);
+        setFormSuccess('');
+      }
+      scrollToTop();
     });
-  }, [age, currentStatus, department, employeeType, firstName, formEle, hireDate, jobTitle, lastName]);
-
-  const clearForm = (ele) => {
-    ele.reset();
   };
 
   return (<div className={"mb-3"}>
@@ -93,7 +110,7 @@ export const EmployeeCreate = () => {
     {formSuccess.length > 0 && <div className={"bg-success-subtle py-2 px-3 rounded border mb-3 text-success"}>
       <div className={"w-100"}><span className={"me-2"}>&#10003;</span>{formSuccess}</div>
     </div>}
-    <form className={"row"} ref={(e) => setFormEle(e)}>
+    <form className={"row"} onSubmit={(e) => createEmployeeRequest(e)}>
       <div className="col-12 col-md-6 mb-3">
         <label htmlFor="firstName" className="form-label">Firstname</label>
         <input type="text" className="form-control" id="firstName" placeholder="e.g. Mark" defaultValue={firstName}
@@ -142,18 +159,19 @@ export const EmployeeCreate = () => {
       <div className="col-12 col-md-6 mb-3">
         <label htmlFor="hireDate" className="form-label">Hire Date</label>
         <input type="date" className="form-control" id="hireDate" placeholder="e.g. yyyy/mm/dd"
-               defaultValue={new Date(hireDate).toISOString().slice(0, 10)}
+               defaultValue={hireDate.toISOString().slice(0, 10)}
                onChange={(e) => changeHandler(e.target.id, e.target.value)} />
       </div>
       <div className="col-12 mb-3">
-        <div className="form-check form-switch">
-          <input className="form-check-input" type="checkbox" id="currentStatus" placeholder="false"
-                 defaultChecked={currentStatus} onChange={(e) => changeHandler(e.target.id, e.target.value)} />
+        <div className="form-check">
+          <input className="form-check-input" type="checkbox" id="currentStatus" defaultChecked={false}
+                 onChange={(e) => changeHandler(e.target.id, e.target.checked)} />
           <label className="form-check-label" htmlFor="currentStatus">Retired?</label>
         </div>
       </div>
       <div className={"col-12 mb-3"}>
-        <Button className={"btn btn-primary px-5"} type={"button"} onClick={createEmployeeRequest}>Create</Button>
+        <Button className={`btn btn-primary px-5 ${mLoading ? 'disabled' : ''}`} type={"submit"}
+                disabled={mLoading}>Create</Button>
       </div>
     </form>
   </div>);

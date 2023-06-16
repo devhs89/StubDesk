@@ -23,7 +23,7 @@ const validHireDate = (val) => {
 };
 
 const validCurrentStatus = (val) => {
-  return new RegExp('on|off').test(val);
+  return new RegExp('working|retired').test(val);
 };
 
 module.exports = {

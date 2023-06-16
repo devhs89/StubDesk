@@ -7,8 +7,8 @@ const EmployeeSchema = new Schema({
   hireDate: {type: String, required: true},
   jobTitle: {type: String, required: true},
   department: {type: String, required: true},
-  employeeType: {type: String, required: true, default: "casual"},
-  currentStatus: {type: String, required: true, default: 'off'}
+  employeeType: {type: String, required: true, default: "seasonal"},
+  currentStatus: {type: String, required: true, default: 'working'}
 });
 const EmployeeModel = mongoose.model("employee", EmployeeSchema);
 module.exports = EmployeeModel;
