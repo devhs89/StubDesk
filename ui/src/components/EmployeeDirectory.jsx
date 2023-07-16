@@ -12,7 +12,7 @@ export class EmployeeDirectory extends Component {
   }
 
   getEmployees(filter = null) {
-    const dataPromise = fetchEmployees(filter);
+    const dataPromise = fetchEmployees(filter?.target.value);
     dataPromise.then(obj => this.setState({employees: obj.data.allEmployees}));
   }
 
@@ -25,11 +25,10 @@ export class EmployeeDirectory extends Component {
       <h1 className={"mb-3"}>Employee Directory</h1>
       <InputGroup className="mb-3 w-md-50 w-lg-25">
         <InputGroup.Text id="employeeTable_empTypesSelect">Filter by</InputGroup.Text>
-        <Form.Select aria-label="Select Employee Type" className="text-capitalize"
-                     onChange={this.getEmployees}>
-          <option value="">All</option>
-          {this.empTypes.map((et, dex) => (
-            <option key={dex} value={et} className="text-capitalize">{et}</option>))}
+        <Form.Select aria-label="Select Employee Type" className="text-capitalize" defaultValue="all"
+                     onChange={(evt) => this.getEmployees(evt)}>
+          <option value="all">All</option>
+          {this.empTypes.map((et, dex) => (<option key={dex} value={et} className="text-capitalize">{et}</option>))}
         </Form.Select>
       </InputGroup>
       <EmployeeTable employees={this.state.employees}></EmployeeTable></>);

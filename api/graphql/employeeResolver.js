@@ -10,7 +10,10 @@ const typeDefs = fs.readFileSync(empGraphPath, 'utf-8');
 
 const resolvers = {
   Query: {
-    allEmployees: async (_, {employeeType}) => await EmployeeModel.find(employeeType ? {employeeType: employeeType} : {}).exec()
+    allEmployees: async (_, {employeeType}) => {
+      const filter = ['full-time', 'part-time', 'contract', 'seasonal'].includes(employeeType);
+      return await EmployeeModel.find(filter ? {employeeType: employeeType} : {}).exec();
+    }
   }, Mutation: {
     addEmployee: async (_, {payload}) => {
       const errsList = [];
