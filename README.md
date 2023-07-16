@@ -1,4 +1,10 @@
 # StubDesk
 
-2023 July 16
+#### Course
+Advanced Full-Stack Programming (PROG8730)
+
+#### 2023 July 16
 End of Assignment 1
+
+#### 2023 July 16
+Start of Assignment 2
