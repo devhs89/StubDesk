@@ -1,6 +1,6 @@
 import {Employee} from "./Employee.jsx";
 import {Component} from "react";
-import {Table} from 'react-bootstrap';
+import {Form, InputGroup, Table} from 'react-bootstrap';
 
 export class EmployeeTable extends Component {
   constructor(props) {

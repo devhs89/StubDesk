@@ -3,6 +3,10 @@ const proxy = require('http-proxy-middleware');
 
 const app = express();
 
+const options = {
+  target: 'http://localhost:30080/graphql', changeOrigin: true
+};
+
 app.use('/graphql', proxy({target: 'http://localhost:30080/graphql'}));
 
 app.use('/', express.static('public'));
