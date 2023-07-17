@@ -4,9 +4,9 @@
  * Module dependencies.
  */
 const express = require('express');
-const _ = require('dotenv').config();
+require('dotenv').config();
 const {connectDb} = require('./data/dbContext');
-const {apiHandler} = require("./api_handler");
+const {apiHandler} = require("./api-handler");
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.set('port', port);
   try {
     await connectDb();
     await apiHandler(app);
-    app.use('*', (req, res, next) => res.redirect('/graphql'));
+    app.use('*', (req, res) => res.redirect('/graphql'));
     app.listen(port, () => {
       console.log(`API server started on http://localhost:${port}`);
     });
