@@ -1,10 +1,14 @@
-import {Employee} from "./Employee.jsx";
 import {Component} from "react";
-import {Form, InputGroup, Table} from 'react-bootstrap';
+import {Table} from 'react-bootstrap';
+import {Navigate, useNavigate} from "react-router-dom";
 
 export class EmployeeTable extends Component {
   constructor(props) {
     super(props);
+  }
+
+  showEmployeeDetail() {
+    useNavigate();
   }
 
   render() {
@@ -23,7 +27,17 @@ export class EmployeeTable extends Component {
           </tr>
           </thead>
           <tbody className={"table-group-divider"}>
-          {this.props.employees.map((emp, dex) => (<Employee key={dex} emp={emp}></Employee>))}
+          {this.props.employees.map((emp, dex) => (
+            <tr key={dex} role={"button"} onClick={() => <Navigate to={`employees/${emp._id}`} />}>
+              <th scope={"row"}>{emp.firstName} {emp.lastName}</th>
+              <td>{emp.age}</td>
+              <td className={emp.jobTitle === 'vp' ? "text-uppercase" : "text-capitalize"}>{emp.jobTitle}</td>
+              <td
+                className={(emp.department === 'it' || emp.department === 'hr') ? "text-uppercase" : "text-capitalize"}>{emp.department}</td>
+              <td className={"text-capitalize"}>{emp.employeeType}</td>
+              <td className={"text-capitalize"}>{emp.currentStatus}</td>
+              <td>{new Date(emp.hireDate).toLocaleDateString()}</td>
+            </tr>))}
           </tbody>
         </Table>
       </div>

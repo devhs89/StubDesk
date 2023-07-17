@@ -2,6 +2,7 @@ import React from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import {Home} from "./Home.jsx";
 import {EmployeeDirectory} from "./EmployeeDirectory.jsx";
+import {Employee} from "./Employee.jsx";
 
 class Page404 extends React.Component {
   render() {
@@ -16,7 +17,9 @@ export class AppRouter extends React.Component {
   render() {
     return (<Routes>
       <Route path={'home'} Component={Home}></Route>
-      <Route path={'employees'} Component={EmployeeDirectory}></Route>
+      <Route path={'employees'} Component={EmployeeDirectory}>
+        <Route path={':id'} Component={Employee}></Route>
+      </Route>
       <Route path="/" element={<Navigate replace to={'/home'} />}></Route>
       <Route path="*" element={<Page404 />}></Route>
     </Routes>);

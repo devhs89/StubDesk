@@ -1,4 +1,5 @@
 type Employee {
+    _id: ID
     firstName: String
     lastName: String
     age: String
