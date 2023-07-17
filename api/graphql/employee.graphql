@@ -11,7 +11,8 @@ type Employee {
 }
 
 type Query {
-    allEmployees(employeeType: String): [Employee]
+    allEmployees(employeeType: String): [Employee],
+    employeeById(id: ID!): Employee
 }
 
 type Mutation {

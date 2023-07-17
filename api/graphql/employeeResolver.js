@@ -13,6 +13,11 @@ const resolvers = {
     allEmployees: async (_, {employeeType}) => {
       const filter = ['full-time', 'part-time', 'contract', 'seasonal'].includes(employeeType);
       return await EmployeeModel.find(filter ? {employeeType: employeeType} : {}).exec();
+    }, employeeById: async (_, {id}) => {
+      console.log(id);
+      const emp = await EmployeeModel.findById(id).exec();
+      console.log(emp);
+      return emp;
     }
   }, Mutation: {
     addEmployee: async (_, {payload}) => {
