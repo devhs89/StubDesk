@@ -1,6 +1,6 @@
 import {Component} from "react";
 import {fetchEmployees} from "../helpers/api-calls";
-import {EmployeeTable} from "./EmployeeTable.jsx";
+import EmployeeTable from "./EmployeeTable.jsx";
 import {Form, InputGroup} from "react-bootstrap";
 
 export class EmployeeDirectory extends Component {

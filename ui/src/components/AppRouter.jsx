@@ -17,11 +17,12 @@ export class AppRouter extends React.Component {
   render() {
     return (<Routes>
       <Route path={'home'} Component={Home}></Route>
-      <Route path={'employees'} Component={EmployeeDirectory}>
+      <Route path={'employee'}>
+        <Route path={'directory'} Component={EmployeeDirectory}></Route>
         <Route path={':id'} Component={Employee}></Route>
       </Route>
       <Route path="/" element={<Navigate replace to={'/home'} />}></Route>
-      <Route path="*" element={<Page404 />}></Route>
+      <Route path="*" Component={Page404}></Route>
     </Routes>);
   }
 }

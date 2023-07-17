@@ -1,14 +1,16 @@
 import {Component} from "react";
 import {Table} from 'react-bootstrap';
-import {Navigate, useNavigate} from "react-router-dom";
+import {appNavigator} from "../helpers/app-navigator";
 
-export class EmployeeTable extends Component {
+class EmployeeTable extends Component {
   constructor(props) {
     super(props);
+    this.toEmployeeDetail = this.toEmployeeDetail.bind(this);
   }
 
-  showEmployeeDetail() {
-    useNavigate();
+
+  toEmployeeDetail(empId) {
+    this.props.navigate(`/employee/${empId}`);
   }
 
   render() {
@@ -28,7 +30,7 @@ export class EmployeeTable extends Component {
           </thead>
           <tbody className={"table-group-divider"}>
           {this.props.employees.map((emp, dex) => (
-            <tr key={dex} role={"button"} onClick={() => <Navigate to={`employees/${emp._id}`} />}>
+            <tr key={dex} role="button" onClick={() => this.toEmployeeDetail(emp._id)}>
               <th scope={"row"}>{emp.firstName} {emp.lastName}</th>
               <td>{emp.age}</td>
               <td className={emp.jobTitle === 'vp' ? "text-uppercase" : "text-capitalize"}>{emp.jobTitle}</td>
@@ -44,3 +46,5 @@ export class EmployeeTable extends Component {
     </>);
   }
 }
+
+export default appNavigator(EmployeeTable);
