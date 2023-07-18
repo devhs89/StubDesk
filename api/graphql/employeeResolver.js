@@ -14,10 +14,7 @@ const resolvers = {
       const filter = ['full-time', 'part-time', 'contract', 'seasonal'].includes(employeeType);
       return await EmployeeModel.find(filter ? {employeeType: employeeType} : {}).exec();
     }, employeeById: async (_, {id}) => {
-      console.log(id);
-      const emp = await EmployeeModel.findById(id).exec();
-      console.log(emp);
-      return emp;
+      return await EmployeeModel.findById(id).exec();
     }
   }, Mutation: {
     addEmployee: async (_, {payload}) => {
@@ -39,6 +36,24 @@ const resolvers = {
         if (errsList.length > 0) return customError({sCode: 400, msgs: errsList});
 
         return await EmployeeModel.create(params);
+      } catch (e) {
+        return e.message;
+      }
+    }, updateEmployee: async (_, {payload}) => {
+      const errsList = [];
+      const customError = ({sCode = 500, msgs = ['Internal Server Error']}) => new Error(JSON.stringify({
+        code: sCode, message: msgs
+      }));
+
+      const updateFields = {};
+
+      try {
+        const parsedPayload = JSON.parse(payload);
+        if (parsedPayload.jobTitle) validJobTitle(parsedPayload.jobTitle) ? updateFields.jobTitle = parsedPayload.jobTitle : errsList.push('Invalid job title');
+        if (parsedPayload.department) validDepartment(parsedPayload.department) ? updateFields.department = parsedPayload.department : errsList.push('Invalid department');
+        if (parsedPayload.currentStatus) validCurrentStatus(parsedPayload.currentStatus) ? updateFields.currentStatus = parsedPayload.currentStatus : errsList.push('Invalid current status');
+        if (errsList.length > 0) return customError({sCode: 400, msgs: errsList});
+        return await EmployeeModel.findByIdAndUpdate(parsedPayload.id, updateFields, {new: true});
       } catch (e) {
         return e.message;
       }
