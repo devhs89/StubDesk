@@ -9,16 +9,16 @@ export class EmployeeCreate extends Component {
     super(props);
 
     this.state = {
-      formErrors: [], formSuccess: '', empDetails: {
-        firstName: '',
-        lastName: '',
-        age: '',
-        jobTitle: 'employee',
-        department: 'it',
-        employeeType: 'seasonal',
-        hireDate: new Date().toISOString().slice(0, 10),
-        currentStatus: 'working'
-      }
+      formErrors: [],
+      formSuccess: '',
+      firstName: '',
+      lastName: '',
+      age: '',
+      jobTitle: 'employee',
+      department: 'it',
+      employeeType: 'seasonal',
+      hireDate: new Date().toISOString().slice(0, 10),
+      currentStatus: 'working'
     };
   }
 
@@ -29,57 +29,66 @@ export class EmployeeCreate extends Component {
     const val = evt.target.id === 'currentStatus' ? evt.target.checked : evt.target.value;
     switch (id) {
       case "firstName":
-        this.setState({empDetails: {firstName: val}});
+        this.setState({firstName: val});
         break;
       case "lastName":
-        this.setState({empDetails: {lastName: val}});
+        this.setState({lastName: val});
         break;
       case "age":
-        this.setState({empDetails: {age: val}});
+        this.setState({age: val});
         break;
       case "jobTitle":
-        this.setState({empDetails: {jobTitle: val}});
+        this.setState({jobTitle: val});
         break;
       case "department":
-        this.setState({empDetails: {department: val}});
+        this.setState({department: val});
         break;
       case "employeeType":
-        this.setState({empDetails: {employeeType: val}});
+        this.setState({employeeType: val});
         break;
       case "hireDate":
-        this.setState({empDetails: {hireDate: new Date(val).toISOString().slice(0, 10)}});
+        this.setState({hireDate: new Date(val).toISOString().slice(0, 10)});
         break;
       case "currentStatus":
-        this.setState({empDetails: {currentStatus: val ? 'retired' : 'working'}});
+        this.setState({currentStatus: val ? 'retired' : 'working'});
         break;
       default:
-        this.setState({empDetails: {currentStatus: val ? 'retired' : 'working'}});
+        this.setState({currentStatus: val ? 'retired' : 'working'});
     }
   };
 
   createEmployeeRequest = (evt) => {
     evt.preventDefault();
-    fetchCreateEmployee(this.state.empDetails).then(resp => {
+    const payload = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      age: this.state.age,
+      jobTitle: this.state.jobTitle,
+      department: this.state.department,
+      employeeType: this.state.employeeType,
+      hireDate: this.state.hireDate,
+      currentStatus: this.state.currentStatus
+    };
+
+    fetchCreateEmployee(payload).then(resp => {
       if (resp?.data?.addEmployee?._id) {
-        this.setState({formErrors: []});
-        this.setState({formSuccess: "Employee created"});
         this.setState({
-          empDetails: {
-            firstName: '',
-            lastName: '',
-            age: '',
-            jobTitle: 'employee',
-            department: 'it',
-            employeeType: 'seasonal',
-            hireDate: new Date().toISOString().slice(0, 10),
-            currentStatus: 'working'
-          }
+          formErrors: [],
+          formSuccess: "Employee created",
+          firstName: '',
+          lastName: '',
+          age: '',
+          jobTitle: 'employee',
+          department: 'it',
+          employeeType: 'seasonal',
+          hireDate: new Date().toISOString().slice(0, 10),
+          currentStatus: 'working'
         });
         evt.target.reset();
       } else {
-        if (resp?.errors?.message) {
+        if (resp?.errors) {
           try {
-            const msgObj = JSON.parse(resp.errors.message);
+            const msgObj = JSON.parse(resp.errors[0].message);
             this.setState({formErrors: [...msgObj.message]});
             this.setState({formSuccess: ''});
           } catch (e) {
@@ -108,6 +117,15 @@ export class EmployeeCreate extends Component {
   render() {
     return (<div className={"mb-3 text-start"}>
       <h1 className={"mb-3 text-center"}>Add Employee</h1>
+      {this.state.firstName}<br />
+      {this.state.lastName}<br />
+      {this.state.age}<br />
+      {this.state.jobTitle}<br />
+      {this.state.department}<br />
+      {this.state.employeeType}<br />
+      {this.state.hireDate}<br />
+      {this.state.currentStatus}<br />
+
       {this.state.formErrors.length > 0 &&
         <div className={"bg-secondary-subtle py-2 px-3 rounded border mb-3 text-danger"}>
           {this.state.formErrors.map((msg, dex) => (
@@ -121,24 +139,24 @@ export class EmployeeCreate extends Component {
         <div className="col-12 col-md-6 mb-3">
           <label htmlFor="firstName" className="form-label">Firstname</label>
           <input type="text" className="form-control" id="firstName" placeholder="e.g. Mark"
-                 defaultValue={this.state.empDetails.firstName}
+                 defaultValue={this.state.firstName}
                  onChange={this.changeHandler.bind(this)} />
         </div>
         <div className="col-12 col-md-6 mb-3">
           <label htmlFor="lastName" className="form-label">Lastname</label>
           <input type="text" className="form-control" id="lastName" placeholder="e.g. Smith"
-                 defaultValue={this.state.empDetails.lastName}
+                 defaultValue={this.state.lastName}
                  onChange={this.changeHandler.bind(this)} />
         </div>
         <div className="col-12 col-md-2 mb-3">
           <label htmlFor="age" className="form-label">Age</label>
           <input type="number" className="form-control" id="age" placeholder="e.g. 23"
-                 defaultValue={this.state.empDetails.age}
+                 defaultValue={this.state.age}
                  onChange={this.changeHandler.bind(this)} />
         </div>
         <div className="col-12 col-md-5 mb-3">
           <label htmlFor="jobTitle" className="form-label">Title</label>
-          <select id="jobTitle" className="form-select" defaultValue={this.state.empDetails.jobTitle}
+          <select id="jobTitle" className="form-select" defaultValue={this.state.jobTitle}
                   onChange={this.changeHandler.bind(this)}>
             <option value="employee">Employee</option>
             <option value="manager">Manager</option>
@@ -148,7 +166,7 @@ export class EmployeeCreate extends Component {
         </div>
         <div className="col-12 col-md-5 mb-3">
           <label htmlFor="department" className="form-label">Department</label>
-          <select id="department" className="form-select" defaultValue={this.state.empDetails.department}
+          <select id="department" className="form-select" defaultValue={this.state.department}
                   onChange={this.changeHandler.bind(this)}>
             <option value="it">IT</option>
             <option value="marketing">Marketing</option>
@@ -158,7 +176,7 @@ export class EmployeeCreate extends Component {
         </div>
         <div className="col-12 col-md-6 mb-3">
           <label htmlFor="employeeType" className="form-label">EmployeeType</label>
-          <select id="employeeType" className="form-select" defaultValue={this.state.empDetails.employeeType}
+          <select id="employeeType" className="form-select" defaultValue={this.state.employeeType}
                   onChange={this.changeHandler.bind(this)}>
             <option value="seasonal">Seasonal</option>
             <option value="contract">Contract</option>
@@ -169,7 +187,7 @@ export class EmployeeCreate extends Component {
         <div className="col-12 col-md-6 mb-3">
           <label htmlFor="hireDate" className="form-label">Hire Date</label>
           <input type="date" className="form-control" id="hireDate" placeholder="e.g. yyyy/mm/dd"
-                 defaultValue={this.state.empDetails.hireDate}
+                 defaultValue={this.state.hireDate}
                  onChange={this.changeHandler.bind(this)} />
         </div>
         <div className="col-12 mb-3">
