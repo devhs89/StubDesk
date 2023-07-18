@@ -2,12 +2,18 @@ import {Component} from "react";
 import {fetchDeleteEmployeeById, fetchEmployeeById, fetchUpdateEmployeeById} from "../helpers/api-calls";
 import {Button, Col, Form, Row} from "react-bootstrap";
 import {appNavigator} from "../helpers/app-navigator";
+import {apiErrorHandler} from "../helpers/error-handler";
 
 class Employee extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      empDetails: {}, jobTitle: undefined, department: undefined, currentStatus: undefined, empUpdate: false
+      formErrors: [],
+      formSuccess: false,
+      empDetails: {},
+      jobTitle: undefined,
+      department: undefined,
+      currentStatus: undefined
     };
     this.toEmployeeDirectory = this.toEmployeeDirectory.bind(this);
   }
@@ -19,6 +25,8 @@ class Employee extends Component {
     });
   }
 
+  scrollToTop = () => window.scrollTo(0, 0);
+
   updateEmployeeHandler(evt) {
     evt.preventDefault();
     const payload = {};
@@ -27,15 +35,26 @@ class Employee extends Component {
     payload.currentStatus = this.state.currentStatus ?? this.state.currentStatus;
     payload.id = this.state.empDetails._id;
     fetchUpdateEmployeeById(payload).then(resp => {
-      if (resp?.data?.updateEmployee?._id) this.setState({
-        empDetails: resp.data.updateEmployee, empUpdate: setTimeout(() => true, 5000)
-      });
+      if (resp?.data?.updateEmployee?._id) {
+        this.setState({empDetails: resp.data.updateEmployee, formSuccess: true});
+        setTimeout(() => this.setState({formSuccess: false}), 5000);
+      } else {
+        const {formErrors, formSuccess} = apiErrorHandler(resp?.errors);
+        this.setState({formErrors: formErrors});
+        this.setState({formSuccess: formSuccess});
+      }
+      this.scrollToTop();
+    }).catch(err => {
+      const {formErrors, formSuccess} = apiErrorHandler(err);
+      this.setState({formErrors: formErrors});
+      this.setState({formSuccess: formSuccess});
+      this.scrollToTop();
     });
   }
 
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
-    return (nextState.empDetails.jobTitle !== this.state.empDetails.jobTitle) || (nextState.empDetails.department !== this.state.empDetails.department) || (nextState.empDetails.currentStatus !== this.state.empDetails.currentStatus);
-  }
+  // shouldComponentUpdate(nextProps, nextState, nextContext) {
+  //   return (nextState.empDetails.jobTitle !== this.state.empDetails.jobTitle) || (nextState.empDetails.department !== this.state.empDetails.department) || (nextState.empDetails.currentStatus !== this.state.empDetails.currentStatus);
+  // }
 
   updateFieldHandler(evt) {
     if (evt.target.id === 'employeeDetail_jobTitle' && this.state.empDetails.jobTitle !== evt.target.value) {
@@ -61,15 +80,20 @@ class Employee extends Component {
 
   render() {
     return (<>
-      <h1 className={"mb-3"}>Employee Details</h1>
-      <Row className="text-start">
+      <h1 className={"mb-3 text-center"}>Employee Details</h1>
+      <Row>
         <Col className="mb-3">
           <Button type="button" className="btn btn-danger" onClick={this.deleteBtnHandler.bind(this)}>Delete
             Employee</Button>
         </Col>
       </Row>
-      {this.state.empUpdate &&
-        <div className={"bg-success-subtle py-2 px-3 rounded border mb-3 text-success text-start"}>
+      {this.state.formErrors?.length > 0 &&
+        <div className={"bg-secondary-subtle py-2 px-3 rounded border mb-3 text-danger"}>
+          {this.state.formErrors.map((msg, dex) => (
+            <div className={"w-100"} key={dex}><span className={"me-2"}>&#33;</span>{msg}</div>))}
+        </div>}
+      {this.state.formSuccess &&
+        <div className={"bg-success-subtle py-2 px-3 rounded border mb-3 text-success"}>
           <div className={"w-100"}><span className={"me-2"}>&#10003; </span>Employee updated successfully</div>
         </div>}
       <Form className="row text-start" onSubmit={this.updateEmployeeHandler.bind(this)}>

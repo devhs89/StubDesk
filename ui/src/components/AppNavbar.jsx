@@ -1,30 +1,23 @@
 import {Component} from "react";
 import {NavLink} from "react-router-dom";
+import {Container, Nav, Navbar} from "react-bootstrap";
 
 export class AppNavbar extends Component {
+
   render() {
-    return (<nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow sticky-top">
-      <div className="container-fluid">
-        <NavLink className="navbar-brand" to="/">StubDesk</NavLink>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navMenuConntent" aria-controls="navMenuConntent" aria-expanded="false"
-                aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navMenuConntent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <NavLink className={({isActive}) => isActive ? 'nav-link active' : 'nav-link inactive'}
-                       aria-current="page"
-                       to="/home">Home</NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/employee/directory"
-                       className={({isActive}) => isActive ? 'nav-link active' : 'nav-link inactive'}>Employees</NavLink>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>);
+    return (<Navbar expand="lg" className="navbar-dark bg-dark shadow" fixed="top">
+      <Container>
+        <Navbar.Brand href="/">StubDesk</Navbar.Brand>
+        <Navbar.Toggle aria-controls="stub-desk-navbar-menu" />
+        <Navbar.Collapse id="stub-desk-navbar-menu">
+          <Nav className="ms-auto">
+            <NavLink className={({isActive}) => isActive ? 'nav-link active' : 'nav-link inactive'} aria-current="page"
+                     to="/home">Home</NavLink>
+            <NavLink to="/employee/directory"
+                     className={({isActive}) => isActive ? 'nav-link active' : 'nav-link inactive'}>Employees</NavLink>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>);
   }
 }

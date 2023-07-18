@@ -2,6 +2,7 @@ import Button from "react-bootstrap/Button";
 import {Component} from "react";
 import {employee} from "../dtos/employee";
 import {fetchCreateEmployee} from "../helpers/api-calls";
+import {apiErrorHandler} from "../helpers/error-handler";
 
 export class EmployeeCreate extends Component {
 
@@ -10,7 +11,7 @@ export class EmployeeCreate extends Component {
 
     this.state = {
       formErrors: [],
-      formSuccess: '',
+      formSuccess: false,
       firstName: '',
       lastName: '',
       age: '',
@@ -86,43 +87,28 @@ export class EmployeeCreate extends Component {
         });
         evt.target.reset();
       } else {
-        if (resp?.errors) {
-          try {
-            const msgObj = JSON.parse(resp.errors[0].message);
-            this.setState({formErrors: [...msgObj.message]});
-            this.setState({formSuccess: ''});
-          } catch (e) {
-            this.setState({formErrors: ["Internal server error"]});
-            this.setState({formSuccess: ''});
-          }
-        } else {
-          this.setState({formErrors: ["Internal server error"]});
-          this.setState({formSuccess: ''});
-        }
+        const {formErrors, formSuccess} = apiErrorHandler(resp?.errors);
+        this.setState({formErrors: formErrors});
+        this.setState({formSuccess: formSuccess});
       }
       this.scrollToTop();
     }).catch(err => {
-      try {
-        const el = JSON.parse(err.message).message;
-        this.setState({formErrors: el});
-        this.setState({formSuccess: ''});
-      } catch (e) {
-        this.setState({formErrors: ["Internal server error"]});
-        this.setState({formSuccess: ''});
-      }
+      const {formErrors, formSuccess} = apiErrorHandler(err);
+      this.setState({formErrors: formErrors});
+      this.setState({formSuccess: formSuccess});
       this.scrollToTop();
     });
   };
 
   render() {
-    return (<div className={"mb-3 text-start"}>
+    return (<div className={"mb-3"}>
       <h1 className={"mb-3 text-center"}>Add Employee</h1>
-      {this.state.formErrors.length > 0 &&
+      {this.state.formErrors?.length > 0 &&
         <div className={"bg-secondary-subtle py-2 px-3 rounded border mb-3 text-danger"}>
           {this.state.formErrors.map((msg, dex) => (
             <div className={"w-100"} key={dex}><span className={"me-2"}>&#33;</span>{msg}</div>))}
         </div>}
-      {this.state.formSuccess.length > 0 &&
+      {this.state.formSuccess?.length > 0 &&
         <div className={"bg-success-subtle py-2 px-3 rounded border mb-3 text-success"}>
           <div className={"w-100"}><span className={"me-2"}>&#10003;</span>{this.state.formSuccess}</div>
         </div>}

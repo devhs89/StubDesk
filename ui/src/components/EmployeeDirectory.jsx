@@ -36,7 +36,7 @@ export class EmployeeDirectory extends Component {
     return (<>
       <h1 className={"mb-3"}>Employee Directory</h1>
       <Row>
-        <Col md="auto" className="text-start mb-3">
+        <Col md="auto" className="mb-3">
           <Link className="btn btn-primary" to="../create" relative="path">Create Employee</Link>
         </Col>
         <Col className="text-md-end mb-3">
@@ -51,7 +51,7 @@ export class EmployeeDirectory extends Component {
         </Col>
       </Row>
       {this.state.firstName && this.state.lastName &&
-        <div className={"bg-secondary-subtle py-2 px-3 rounded border mb-3 text-danger text-start"}>
+        <div className={"bg-secondary-subtle py-2 px-3 rounded border mb-3 text-danger"}>
           ! {`${this.state.firstName} ${this.state.lastName}`} deleted successfully
         </div>}
       <EmployeeTable employees={this.state.employees} /></>);
