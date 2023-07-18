@@ -4,7 +4,13 @@
     "node": true
   },
   "rules": {
-    "import/extensions": [ "error", "always", { "ignorePackages": true } ],
+    "import/extensions": [
+      "error",
+      "always",
+      {
+        "ignorePackages": true
+      }
+    ],
     "react/prop-types": "off"
   }
 }
