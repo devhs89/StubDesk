@@ -6,7 +6,9 @@ import {appNavigator} from "../helpers/app-navigator";
 class Employee extends Component {
   constructor(props) {
     super(props);
-    this.state = {empDetails: {}, jobTitle: undefined, department: undefined, currentStatus: undefined};
+    this.state = {
+      empDetails: {}, jobTitle: undefined, department: undefined, currentStatus: undefined, empUpdate: false
+    };
     this.toEmployeeDirectory = this.toEmployeeDirectory.bind(this);
   }
 
@@ -25,7 +27,9 @@ class Employee extends Component {
     payload.currentStatus = this.state.currentStatus ?? this.state.currentStatus;
     payload.id = this.state.empDetails._id;
     fetchUpdateEmployeeById(payload).then(resp => {
-      if (resp?.data?.updateEmployee?._id) this.setState({empDetails: resp.data.updateEmployee});
+      if (resp?.data?.updateEmployee?._id) this.setState({
+        empDetails: resp.data.updateEmployee, empUpdate: setTimeout(() => true, 5000)
+      });
     });
   }
 
@@ -64,6 +68,10 @@ class Employee extends Component {
             Employee</Button>
         </Col>
       </Row>
+      {this.state.empUpdate &&
+        <div className={"bg-success-subtle py-2 px-3 rounded border mb-3 text-success text-start"}>
+          <div className={"w-100"}><span className={"me-2"}>&#10003; </span>Employee updated successfully</div>
+        </div>}
       <Form className="row text-start" onSubmit={this.updateEmployeeHandler.bind(this)}>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_firstName">
           <Form.Label>Firstname</Form.Label>
