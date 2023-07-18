@@ -44,7 +44,7 @@ export class EmployeeDirectory extends Component {
             <InputGroup.Text id=" employeeTable_empTypesSelect">Filter by</InputGroup.Text>
             <Form.Select aria-label=" Select Employee Type" className="text-capitalize" defaultValue=" all"
                          onChange={(evt) => this.getEmployees(evt)}>
-              <option value=" all">All</option>
+              <option value="all">All</option>
               {this.empTypes.map((et, dex) => (<option key={dex} value={et} className="text-capitalize">{et}</option>))}
             </Form.Select>
           </InputGroup>

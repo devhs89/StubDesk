@@ -29,6 +29,12 @@ class Employee extends Component {
 
   updateEmployeeHandler(evt) {
     evt.preventDefault();
+
+    if (!this.state.jobTitle && !this.state.department && !this.state.currentStatus) {
+      this.setState({formErrors: ['No field updated. Change at least one field to update employee information.']});
+      return;
+    }
+
     const payload = {};
     payload.jobTitle = this.state.jobTitle ?? this.state.jobTitle;
     payload.department = this.state.department ?? this.state.department;
@@ -36,7 +42,7 @@ class Employee extends Component {
     payload.id = this.state.empDetails._id;
     fetchUpdateEmployeeById(payload).then(resp => {
       if (resp?.data?.updateEmployee?._id) {
-        this.setState({empDetails: resp.data.updateEmployee, formSuccess: true});
+        this.setState({empDetails: resp.data.updateEmployee, formErrors: [], formSuccess: true});
         setTimeout(() => this.setState({formSuccess: false}), 5000);
       } else {
         const {formErrors, formSuccess} = apiErrorHandler(resp?.errors);
@@ -51,10 +57,6 @@ class Employee extends Component {
       this.scrollToTop();
     });
   }
-
-  // shouldComponentUpdate(nextProps, nextState, nextContext) {
-  //   return (nextState.empDetails.jobTitle !== this.state.empDetails.jobTitle) || (nextState.empDetails.department !== this.state.empDetails.department) || (nextState.empDetails.currentStatus !== this.state.empDetails.currentStatus);
-  // }
 
   updateFieldHandler(evt) {
     if (evt.target.id === 'employeeDetail_jobTitle' && this.state.empDetails.jobTitle !== evt.target.value) {
@@ -92,10 +94,9 @@ class Employee extends Component {
           {this.state.formErrors.map((msg, dex) => (
             <div className={"w-100"} key={dex}><span className={"me-2"}>&#33;</span>{msg}</div>))}
         </div>}
-      {this.state.formSuccess &&
-        <div className={"bg-success-subtle py-2 px-3 rounded border mb-3 text-success"}>
-          <div className={"w-100"}><span className={"me-2"}>&#10003; </span>Employee updated successfully</div>
-        </div>}
+      {this.state.formSuccess && <div className={"bg-success-subtle py-2 px-3 rounded border mb-3 text-success"}>
+        <div className={"w-100"}><span className={"me-2"}>&#10003; </span>Employee updated successfully</div>
+      </div>}
       <Form className="row text-start" onSubmit={this.updateEmployeeHandler.bind(this)}>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_firstName">
           <Form.Label>Firstname</Form.Label>
@@ -124,19 +125,32 @@ class Employee extends Component {
         </Form.Group>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_jobTitle">
           <Form.Label>Job Title</Form.Label>
-          <Form.Control type="text" placeholder="Your job title" defaultValue={this.state.empDetails.jobTitle}
-                        onChange={this.updateFieldHandler.bind(this)} />
+          <Form.Select placeholder="Your job title" value={this.state.jobTitle ?? this.state.empDetails.jobTitle}
+                       onChange={this.updateFieldHandler.bind(this)}>
+            <option value="employee">Employee</option>
+            <option value="manager">Manager</option>
+            <option value="director">Director</option>
+            <option value="vp">Vice President</option>
+          </Form.Select>
         </Form.Group>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_department">
           <Form.Label>Department</Form.Label>
-          <Form.Control type="text" placeholder="Your department" defaultValue={this.state.empDetails.department}
-                        onChange={this.updateFieldHandler.bind(this)} />
+          <Form.Select placeholder="Your department" value={this.state.department ?? this.state.empDetails.department}
+                       onChange={this.updateFieldHandler.bind(this)}>
+            <option value="it">IT</option>
+            <option value="marketing">Marketing</option>
+            <option value="engineering">Engineering</option>
+            <option value="hr">Human Resources</option>
+          </Form.Select>
         </Form.Group>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_currentStatus">
           <Form.Label>Employment Status</Form.Label>
-          <Form.Control type="text" placeholder="Your employment status"
-                        defaultValue={this.state.empDetails.currentStatus}
-                        onChange={this.updateFieldHandler.bind(this)} />
+          <Form.Select placeholder="Your employment status"
+                       value={this.state.currentStatus ?? this.state.empDetails.currentStatus}
+                       onChange={this.updateFieldHandler.bind(this)}>
+            <option value="working">Working</option>
+            <option value="retired">Retired</option>
+          </Form.Select>
         </Form.Group>
         <Row>
           <Col>
