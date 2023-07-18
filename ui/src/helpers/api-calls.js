@@ -23,7 +23,7 @@ export const fetchCreateEmployee = async (payload) => {
   return await fetch('/graphql', {
     method: 'POST', headers: {
       'Content-Type': 'application/json',
-    }, body: JSON.stringify({mutation: createEmployeeMutation, variables: {payload: payload}})
+    }, body: JSON.stringify({query: createEmployeeMutation, variables: {payload: JSON.stringify(payload)}})
   }).then(resp => resp.json());
 };
 
