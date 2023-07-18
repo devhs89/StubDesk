@@ -117,15 +117,6 @@ export class EmployeeCreate extends Component {
   render() {
     return (<div className={"mb-3 text-start"}>
       <h1 className={"mb-3 text-center"}>Add Employee</h1>
-      {this.state.firstName}<br />
-      {this.state.lastName}<br />
-      {this.state.age}<br />
-      {this.state.jobTitle}<br />
-      {this.state.department}<br />
-      {this.state.employeeType}<br />
-      {this.state.hireDate}<br />
-      {this.state.currentStatus}<br />
-
       {this.state.formErrors.length > 0 &&
         <div className={"bg-secondary-subtle py-2 px-3 rounded border mb-3 text-danger"}>
           {this.state.formErrors.map((msg, dex) => (

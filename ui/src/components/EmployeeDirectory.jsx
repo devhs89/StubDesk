@@ -19,6 +19,17 @@ export class EmployeeDirectory extends Component {
 
   componentDidMount() {
     this.getEmployees();
+    this.getUrlParams();
+  }
+
+  getUrlParams() {
+    const firstAndLast = window.location.href.split('?').pop().split('&');
+    if (firstAndLast.length === 2) {
+      const fName = firstAndLast[0].split('=').pop();
+      this.setState({firstName: fName});
+      const lName = firstAndLast[1].split('=').pop();
+      this.setState({lastName: lName});
+    }
   }
 
   render() {
@@ -39,6 +50,10 @@ export class EmployeeDirectory extends Component {
           </InputGroup>
         </Col>
       </Row>
+      {this.state.firstName && this.state.lastName &&
+        <div className={"bg-secondary-subtle py-2 px-3 rounded border mb-3 text-danger text-start"}>
+          ! {`${this.state.firstName} ${this.state.lastName}`} deleted successfully
+        </div>}
       <EmployeeTable employees={this.state.employees} /></>);
   }
 }

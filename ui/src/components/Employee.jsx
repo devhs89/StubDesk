@@ -1,11 +1,13 @@
 import {Component} from "react";
-import {fetchEmployeeById, fetchUpdateEmployeeById} from "../helpers/api-calls";
+import {fetchDeleteEmployeeById, fetchEmployeeById, fetchUpdateEmployeeById} from "../helpers/api-calls";
 import {Button, Col, Form, Row} from "react-bootstrap";
+import {appNavigator} from "../helpers/app-navigator";
 
-export class Employee extends Component {
+class Employee extends Component {
   constructor(props) {
     super(props);
     this.state = {empDetails: {}, jobTitle: undefined, department: undefined, currentStatus: undefined};
+    this.toEmployeeDirectory = this.toEmployeeDirectory.bind(this);
   }
 
   componentDidMount() {
@@ -43,9 +45,25 @@ export class Employee extends Component {
     }
   }
 
+  toEmployeeDirectory(firstName = 'employee', lastName = 'employee') {
+    this.props.navigate(`/employee/directory?firstname=${firstName}&lastname=${lastName}`);
+  };
+
+  deleteBtnHandler() {
+    fetchDeleteEmployeeById(this.state.empDetails._id ?? window.location.href.split('/').pop()).then(resp => {
+      if (resp?.data?.deleteEmployee?.firstName) this.toEmployeeDirectory(resp.data.deleteEmployee.firstName, resp.data.deleteEmployee.lastName);
+    });
+  }
+
   render() {
     return (<>
       <h1 className={"mb-3"}>Employee Details</h1>
+      <Row className="text-start">
+        <Col className="mb-3">
+          <Button type="button" className="btn btn-danger" onClick={this.deleteBtnHandler.bind(this)}>Delete
+            Employee</Button>
+        </Col>
+      </Row>
       <Form className="row text-start" onSubmit={this.updateEmployeeHandler.bind(this)}>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_firstName">
           <Form.Label>Firstname</Form.Label>
@@ -97,3 +115,5 @@ export class Employee extends Component {
     </>);
   }
 }
+
+export default appNavigator(Employee);

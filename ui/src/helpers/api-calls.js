@@ -1,4 +1,10 @@
-import {allEmployeesQuery, createEmployeeMutation, employeeByIdQuery, updateEmployeeMutation} from "../graphql/queries";
+import {
+  allEmployeesQuery,
+  createEmployeeMutation,
+  deleteEmployeeMutation,
+  employeeByIdQuery,
+  updateEmployeeMutation
+} from "../graphql/queries";
 
 export const fetchEmployees = async (empType = null) => {
   const payload = empType ? {query: allEmployeesQuery, variables: {employeeType: empType}} : {query: allEmployeesQuery};
@@ -11,7 +17,6 @@ export const fetchEmployees = async (empType = null) => {
 };
 
 export const fetchEmployeeById = async (id) => {
-  if (!id) return null;
   return await fetch('/graphql', {
     method: 'POST', headers: {
       'Content-Type': 'application/json',
@@ -33,5 +38,13 @@ export const fetchUpdateEmployeeById = async (payload) => {
     method: 'POST', headers: {
       'Content-Type': 'application/json',
     }, body: JSON.stringify({query: updateEmployeeMutation, variables: {payload: JSON.stringify(payload)}})
+  }).then(resp => resp.json());
+};
+
+export const fetchDeleteEmployeeById = async (id) => {
+  return await fetch('/graphql', {
+    method: 'POST', headers: {
+      'Content-Type': 'application/json',
+    }, body: JSON.stringify({query: deleteEmployeeMutation, variables: {id: id}})
   }).then(resp => resp.json());
 };

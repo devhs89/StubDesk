@@ -57,7 +57,7 @@ const resolvers = {
       } catch (e) {
         return e.message;
       }
-    }
+    }, deleteEmployee: async (_, {id}) => EmployeeModel.findByIdAndDelete(id)
   }
 };
 

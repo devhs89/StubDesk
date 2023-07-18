@@ -2,7 +2,7 @@ import React from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import {Home} from "./Home.jsx";
 import {EmployeeDirectory} from "./EmployeeDirectory.jsx";
-import {Employee} from "./Employee.jsx";
+import Employee from "./Employee.jsx";
 import {EmployeeCreate} from "./EmployeeCreate.jsx";
 
 class Page404 extends React.Component {
