@@ -7,7 +7,7 @@ export class AppNavbar extends Component {
   // use isActive property to display active routes in nav bar (source: https://react.dev/reference/react)
   render() {
     return (<Navbar expand="lg" className="navbar-dark bg-dark shadow" fixed="top">
-      <Container>
+      <Container fluid={true}>
         <Navbar.Brand href="/">StubDesk</Navbar.Brand>
         <Navbar.Toggle aria-controls="stub-desk-navbar-menu" />
         <Navbar.Collapse id="stub-desk-navbar-menu">
