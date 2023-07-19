@@ -3,6 +3,7 @@ import {Col, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 
 export class Home extends Component {
+  // welcome page
   render() {
     return (<div className="text-center mx-auto">
       <h1>Welcome</h1>

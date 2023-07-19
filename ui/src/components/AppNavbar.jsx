@@ -3,7 +3,8 @@ import {NavLink} from "react-router-dom";
 import {Container, Nav, Navbar} from "react-bootstrap";
 
 export class AppNavbar extends Component {
-
+  // client app navigation bar
+  // use isActive property to display active routes in nav bar (source: https://react.dev/reference/react)
   render() {
     return (<Navbar expand="lg" className="navbar-dark bg-dark shadow" fixed="top">
       <Container>

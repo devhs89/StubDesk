@@ -1,5 +1,6 @@
 const path = require('path');
 
+// Webpack config (source: Pro MERN Stack, author: Vasan Subramanian)
 const browserConfig = {
   mode: 'development', entry: {app: ['./src/index.js']}, output: {
     filename: 'app.bundle.js', path: path.resolve(__dirname, 'public'), publicPath: '/',

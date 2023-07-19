@@ -6,6 +6,7 @@ import Employee from "./Employee.jsx";
 import {EmployeeCreate} from "./EmployeeCreate.jsx";
 
 class Page404 extends React.Component {
+  // Error 404 page for unidentified routes
   render() {
     return <>
       <div className="w-100 display-4 mb-3 text-danger">Error 404</div>
@@ -15,6 +16,8 @@ class Page404 extends React.Component {
 }
 
 export class AppRouter extends React.Component {
+  // application routes using hash router
+  // EmployeeDirectory, EmployeeCreate & Employee components as nested routes
   render() {
     return (<Routes>
       <Route path={'home'} Component={Home}></Route>

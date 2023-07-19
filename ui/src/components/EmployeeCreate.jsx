@@ -59,6 +59,7 @@ export class EmployeeCreate extends Component {
   };
 
   createEmployeeRequest = (evt) => {
+    // crete employee with provied fields
     evt.preventDefault();
     const payload = {
       firstName: this.state.firstName,
@@ -71,11 +72,12 @@ export class EmployeeCreate extends Component {
       currentStatus: this.state.currentStatus
     };
 
+    // create employee API call
     fetchCreateEmployee(payload).then(resp => {
       if (resp?.data?.addEmployee?._id) {
         this.setState({
           formErrors: [],
-          formSuccess: "Employee created",
+          formSuccess: false,
           firstName: '',
           lastName: '',
           age: '',

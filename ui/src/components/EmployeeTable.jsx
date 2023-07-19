@@ -8,8 +8,8 @@ class EmployeeTable extends Component {
     this.toEmployeeDetail = this.toEmployeeDetail.bind(this);
   }
 
-
   toEmployeeDetail(empId) {
+    // navigate to employee detail page when clicked on a row
     this.props.navigate(`/employee/${empId}`);
   }
 

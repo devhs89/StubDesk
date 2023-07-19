@@ -5,6 +5,7 @@ import {AppRouter} from "./components/AppRouter.jsx";
 import {Component} from "react";
 
 class App extends Component {
+  // all content wrapped in hash router to provide routing
   render() {
     return (<HashRouter>
       <AppNavbar />

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-const _ = require('dotenv').config();
+require('dotenv').config();
 
+// database connection
 async function connectDb() {
   const dbUserName = process.env.DB_USERNAME;
   const dbPassword = process.env.DB_PASSWORD;

@@ -1,3 +1,4 @@
+// employee dto
 export const employee = {
   _id: "",
   firstName: "",

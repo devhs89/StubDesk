@@ -13,12 +13,15 @@ export class EmployeeDirectory extends Component {
   }
 
   getEmployees(filter = null) {
+    // all or filtered employees API call
     const dataPromise = fetchEmployees(filter?.target.value);
     dataPromise.then(obj => this.setState({employees: obj.data.allEmployees}));
   }
 
   componentDidMount() {
+    // get all or any filtered employees
     this.getEmployees();
+    // get url parameters, if present
     this.getUrlParams();
   }
 

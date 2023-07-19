@@ -19,7 +19,10 @@ class Employee extends Component {
   }
 
   componentDidMount() {
+    // fetch employee details when component mounts initially, using id parameter from route
     const id = window.location.href.split('/').pop();
+
+    // get employee by id API call
     fetchEmployeeById(id).then(resp => {
       this.setState({empDetails: resp.data.employeeById});
     });
@@ -28,6 +31,7 @@ class Employee extends Component {
   scrollToTop = () => window.scrollTo(0, 0);
 
   updateEmployeeHandler(evt) {
+    // update employee if any of the three allowed fields change
     evt.preventDefault();
 
     if (!this.state.jobTitle && !this.state.department && !this.state.currentStatus) {
@@ -40,6 +44,8 @@ class Employee extends Component {
     payload.department = this.state.department ?? this.state.department;
     payload.currentStatus = this.state.currentStatus ?? this.state.currentStatus;
     payload.id = this.state.empDetails._id;
+
+    // update employee by id API call
     fetchUpdateEmployeeById(payload).then(resp => {
       if (resp?.data?.updateEmployee?._id) {
         this.setState({empDetails: resp.data.updateEmployee, formErrors: [], formSuccess: true});
@@ -76,6 +82,7 @@ class Employee extends Component {
   };
 
   deleteBtnHandler() {
+    // delete employee by id API call, and if successful, navigate back to employee directory
     fetchDeleteEmployeeById(this.state.empDetails._id ?? window.location.href.split('/').pop()).then(resp => {
       if (resp?.data?.deleteEmployee?.firstName) this.toEmployeeDirectory(resp.data.deleteEmployee.firstName, resp.data.deleteEmployee.lastName);
     });

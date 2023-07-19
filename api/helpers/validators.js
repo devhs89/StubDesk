@@ -1,3 +1,5 @@
+// all validators
+
 const validName = (val) => {
   return new RegExp('^[a-zA-Z]+(([\',. -][a-zA-Z ])?[a-zA-Z]*)*$').test(val);
 };

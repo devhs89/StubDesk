@@ -6,6 +6,8 @@ import {
   updateEmployeeMutation
 } from "../graphql/queries";
 
+// all API calls
+
 export const fetchEmployees = async (empType = null) => {
   const payload = empType ? {query: allEmployeesQuery, variables: {employeeType: empType}} : {query: allEmployeesQuery};
 
