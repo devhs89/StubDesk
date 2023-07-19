@@ -77,7 +77,7 @@ export class EmployeeCreate extends Component {
       if (resp?.data?.addEmployee?._id) {
         this.setState({
           formErrors: [],
-          formSuccess: false,
+          formSuccess: true,
           firstName: '',
           lastName: '',
           age: '',
@@ -110,10 +110,10 @@ export class EmployeeCreate extends Component {
           {this.state.formErrors.map((msg, dex) => (
             <div className={"w-100"} key={dex}><span className={"me-2"}>&#33;</span>{msg}</div>))}
         </div>}
-      {this.state.formSuccess?.length > 0 &&
-        <div className={"bg-success-subtle py-2 px-3 rounded border mb-3 text-success"}>
-          <div className={"w-100"}><span className={"me-2"}>&#10003;</span>{this.state.formSuccess}</div>
-        </div>}
+      {this.state.formSuccess && <div className={"bg-success-subtle py-2 px-3 rounded border mb-3 text-success"}>
+        <div className={"w-100"}><span className={"me-2"}>&#10003;</span>Employee created successfully
+        </div>
+      </div>}
       <form className={"row"} onSubmit={this.createEmployeeRequest.bind(this)}>
         <div className="col-12 col-md-6 mb-3">
           <label htmlFor="firstName" className="form-label">Firstname</label>
