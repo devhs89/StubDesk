@@ -56,6 +56,7 @@ class Employee extends Component {
       this.setState({formSuccess: formSuccess});
       this.scrollToTop();
     });
+    this.setState({jobTitle: undefined, department: undefined, currentStatus: undefined});
   }
 
   updateFieldHandler(evt) {

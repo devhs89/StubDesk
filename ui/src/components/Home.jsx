@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 
 export class Home extends Component {
   render() {
-    return (<>
+    return (<div className="text-center mx-auto">
       <h1>Welcome</h1>
       <p>Click the button below to navigate to employee directory.</p>
       <Row>
@@ -12,6 +12,6 @@ export class Home extends Component {
           <Link className="btn btn-primary" to="/employee/directory">Employee Directory</Link>
         </Col>
       </Row>
-    </>);
+    </div>);
   }
 }

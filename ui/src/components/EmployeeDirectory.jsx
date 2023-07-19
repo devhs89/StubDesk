@@ -33,8 +33,8 @@ export class EmployeeDirectory extends Component {
   }
 
   render() {
-    return (<>
-      <h1 className={"mb-3"}>Employee Directory</h1>
+    return (<div>
+      <h1 className="mb-3 text-center">Employee Directory</h1>
       <Row>
         <Col md="auto" className="mb-3">
           <Link className="btn btn-primary" to="../create" relative="path">Create Employee</Link>
@@ -54,6 +54,6 @@ export class EmployeeDirectory extends Component {
         <div className={"bg-secondary-subtle py-2 px-3 rounded border mb-3 text-danger"}>
           ! {`${this.state.firstName} ${this.state.lastName}`} deleted successfully
         </div>}
-      <EmployeeTable employees={this.state.employees} /></>);
+      <EmployeeTable employees={this.state.employees} /></div>);
   }
 }
