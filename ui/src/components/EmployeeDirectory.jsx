@@ -10,19 +10,13 @@ export class EmployeeDirectory extends Component {
   constructor(props) {
     super(props);
     this.state = {employees: []};
+    this.getEmployees = this.getEmployees.bind(this);
   }
 
   getEmployees(filter = null) {
     // all or filtered employees API call
     const dataPromise = fetchEmployees(filter?.target.value);
     dataPromise.then(obj => this.setState({employees: obj.data.allEmployees}));
-  }
-
-  componentDidMount() {
-    // get all or any filtered employees
-    this.getEmployees();
-    // get url parameters, if present
-    this.getUrlParams();
   }
 
   getUrlParams() {
@@ -33,6 +27,13 @@ export class EmployeeDirectory extends Component {
       const lName = firstAndLast[1].split('=').pop();
       this.setState({lastName: lName});
     }
+  }
+
+  componentDidMount() {
+    // get all or any filtered employees
+    this.getEmployees();
+    // get url parameters, if present
+    this.getUrlParams();
   }
 
   render() {
@@ -46,7 +47,7 @@ export class EmployeeDirectory extends Component {
           <InputGroup className="w-md-50 w-lg-25 ms-auto">
             <InputGroup.Text id=" employeeTable_empTypesSelect">Filter by</InputGroup.Text>
             <Form.Select aria-label=" Select Employee Type" className="text-capitalize" defaultValue=" all"
-                         onChange={(evt) => this.getEmployees(evt)}>
+                         onChange={this.getEmployees}>
               <option value="all">All</option>
               {this.empTypes.map((et, dex) => (<option key={dex} value={et} className="text-capitalize">{et}</option>))}
             </Form.Select>

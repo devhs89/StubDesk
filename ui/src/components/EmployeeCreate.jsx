@@ -21,6 +21,9 @@ export class EmployeeCreate extends Component {
       hireDate: new Date().toISOString().slice(0, 10),
       currentStatus: 'working'
     };
+
+    this.changeHandler = this.changeHandler.bind(this);
+    this.createEmployeeRequest = this.createEmployeeRequest.bind(this);
   }
 
   scrollToTop = () => window.scrollTo(0, 0);
@@ -114,29 +117,29 @@ export class EmployeeCreate extends Component {
         <div className={"w-100"}><span className={"me-2"}>&#10003;</span>Employee created successfully
         </div>
       </div>}
-      <form className={"row"} onSubmit={this.createEmployeeRequest.bind(this)}>
+      <form className={"row"} onSubmit={this.createEmployeeRequest}>
         <div className="col-12 col-md-6 mb-3">
           <label htmlFor="firstName" className="form-label">Firstname</label>
           <input type="text" className="form-control" id="firstName" placeholder="e.g. Mark"
                  defaultValue={this.state.firstName}
-                 onChange={this.changeHandler.bind(this)} />
+                 onChange={this.changeHandler} />
         </div>
         <div className="col-12 col-md-6 mb-3">
           <label htmlFor="lastName" className="form-label">Lastname</label>
           <input type="text" className="form-control" id="lastName" placeholder="e.g. Smith"
                  defaultValue={this.state.lastName}
-                 onChange={this.changeHandler.bind(this)} />
+                 onChange={this.changeHandler} />
         </div>
         <div className="col-12 col-md-2 mb-3">
           <label htmlFor="age" className="form-label">Age</label>
           <input type="number" className="form-control" id="age" placeholder="e.g. 23"
                  defaultValue={this.state.age}
-                 onChange={this.changeHandler.bind(this)} />
+                 onChange={this.changeHandler} />
         </div>
         <div className="col-12 col-md-5 mb-3">
           <label htmlFor="jobTitle" className="form-label">Title</label>
           <select id="jobTitle" className="form-select" defaultValue={this.state.jobTitle}
-                  onChange={this.changeHandler.bind(this)}>
+                  onChange={this.changeHandler}>
             <option value="employee">Employee</option>
             <option value="manager">Manager</option>
             <option value="director">Director</option>
@@ -146,7 +149,7 @@ export class EmployeeCreate extends Component {
         <div className="col-12 col-md-5 mb-3">
           <label htmlFor="department" className="form-label">Department</label>
           <select id="department" className="form-select" defaultValue={this.state.department}
-                  onChange={this.changeHandler.bind(this)}>
+                  onChange={this.changeHandler}>
             <option value="it">IT</option>
             <option value="marketing">Marketing</option>
             <option value="engineering">Engineering</option>
@@ -156,7 +159,7 @@ export class EmployeeCreate extends Component {
         <div className="col-12 col-md-6 mb-3">
           <label htmlFor="employeeType" className="form-label">EmployeeType</label>
           <select id="employeeType" className="form-select" defaultValue={this.state.employeeType}
-                  onChange={this.changeHandler.bind(this)}>
+                  onChange={this.changeHandler}>
             <option value="seasonal">Seasonal</option>
             <option value="contract">Contract</option>
             <option value="part-time">Part Time</option>
@@ -167,12 +170,12 @@ export class EmployeeCreate extends Component {
           <label htmlFor="hireDate" className="form-label">Hire Date</label>
           <input type="date" className="form-control" id="hireDate" placeholder="e.g. yyyy/mm/dd"
                  defaultValue={this.state.hireDate}
-                 onChange={this.changeHandler.bind(this)} />
+                 onChange={this.changeHandler} />
         </div>
         <div className="col-12 mb-3">
           <div className="form-check">
             <input className="form-check-input" type="checkbox" id="currentStatus" defaultChecked={false}
-                   onChange={this.changeHandler.bind(this)} />
+                   onChange={this.changeHandler} />
             <label className="form-check-label" htmlFor="currentStatus">Retired?</label>
           </div>
         </div>

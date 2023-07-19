@@ -15,7 +15,10 @@ class Employee extends Component {
       department: undefined,
       currentStatus: undefined
     };
+    this.updateFieldHandler = this.updateFieldHandler.bind(this);
+    this.updateEmployeeHandler = this.updateEmployeeHandler.bind(this);
     this.toEmployeeDirectory = this.toEmployeeDirectory.bind(this);
+    this.deleteBtnHandler = this.deleteBtnHandler.bind(this);
   }
 
   componentDidMount() {
@@ -29,6 +32,18 @@ class Employee extends Component {
   }
 
   scrollToTop = () => window.scrollTo(0, 0);
+
+  updateFieldHandler(evt) {
+    if (evt.target.id === 'employeeDetail_jobTitle' && this.state.empDetails.jobTitle !== evt.target.value) {
+      this.setState({jobTitle: evt.target.value});
+    }
+    if (evt.target.id === 'employeeDetail_department' && this.state.empDetails.department !== evt.target.value) {
+      this.setState({department: evt.target.value});
+    }
+    if (evt.target.id === 'employeeDetail_currentStatus' && this.state.empDetails.currentStatus !== evt.target.value) {
+      this.setState({currentStatus: evt.target.value});
+    }
+  }
 
   updateEmployeeHandler(evt) {
     // update employee if any of the three allowed fields change
@@ -65,18 +80,6 @@ class Employee extends Component {
     this.setState({jobTitle: undefined, department: undefined, currentStatus: undefined});
   }
 
-  updateFieldHandler(evt) {
-    if (evt.target.id === 'employeeDetail_jobTitle' && this.state.empDetails.jobTitle !== evt.target.value) {
-      this.setState({jobTitle: evt.target.value});
-    }
-    if (evt.target.id === 'employeeDetail_department' && this.state.empDetails.department !== evt.target.value) {
-      this.setState({department: evt.target.value});
-    }
-    if (evt.target.id === 'employeeDetail_currentStatus' && this.state.empDetails.currentStatus !== evt.target.value) {
-      this.setState({currentStatus: evt.target.value});
-    }
-  }
-
   toEmployeeDirectory(firstName = 'employee', lastName = 'employee') {
     this.props.navigate(`/employee/directory?firstname=${firstName}&lastname=${lastName}`);
   };
@@ -93,7 +96,7 @@ class Employee extends Component {
       <h1 className={"mb-3 text-center"}>Employee Details</h1>
       <Row>
         <Col className="mb-3">
-          <Button type="button" className="btn btn-danger" onClick={this.deleteBtnHandler.bind(this)}>Delete
+          <Button type="button" className="btn btn-danger" onClick={this.deleteBtnHandler}>Delete
             Employee</Button>
         </Col>
       </Row>
@@ -105,7 +108,7 @@ class Employee extends Component {
       {this.state.formSuccess && <div className={"bg-success-subtle py-2 px-3 rounded border mb-3 text-success"}>
         <div className={"w-100"}><span className={"me-2"}>&#10003; </span>Employee updated successfully</div>
       </div>}
-      <Form className="row text-start" onSubmit={this.updateEmployeeHandler.bind(this)}>
+      <Form className="row text-start" onSubmit={this.updateEmployeeHandler}>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_firstName">
           <Form.Label>Firstname</Form.Label>
           <Form.Control type="text" placeholder="Your first name" defaultValue={this.state.empDetails.firstName}
@@ -134,7 +137,7 @@ class Employee extends Component {
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_jobTitle">
           <Form.Label>Job Title</Form.Label>
           <Form.Select placeholder="Your job title" value={this.state.jobTitle ?? this.state.empDetails.jobTitle}
-                       onChange={this.updateFieldHandler.bind(this)}>
+                       onChange={this.updateFieldHandler}>
             <option value="employee">Employee</option>
             <option value="manager">Manager</option>
             <option value="director">Director</option>
@@ -144,7 +147,7 @@ class Employee extends Component {
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_department">
           <Form.Label>Department</Form.Label>
           <Form.Select placeholder="Your department" value={this.state.department ?? this.state.empDetails.department}
-                       onChange={this.updateFieldHandler.bind(this)}>
+                       onChange={this.updateFieldHandler}>
             <option value="it">IT</option>
             <option value="marketing">Marketing</option>
             <option value="engineering">Engineering</option>
@@ -155,7 +158,7 @@ class Employee extends Component {
           <Form.Label>Employment Status</Form.Label>
           <Form.Select placeholder="Your employment status"
                        value={this.state.currentStatus ?? this.state.empDetails.currentStatus}
-                       onChange={this.updateFieldHandler.bind(this)}>
+                       onChange={this.updateFieldHandler}>
             <option value="working">Working</option>
             <option value="retired">Retired</option>
           </Form.Select>
