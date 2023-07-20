@@ -1,0 +1,22 @@
+type Employee {
+    _id: ID
+    firstName: String
+    lastName: String
+    age: String
+    hireDate: String
+    jobTitle: String
+    department: String
+    employeeType: String
+    currentStatus: String
+}
+
+type Query {
+    allEmployees(employeeType: String): [Employee],
+    employeeById(id: ID!): Employee
+}
+
+type Mutation {
+    addEmployee(payload: String!): Employee,
+    updateEmployee(payload: String!): Employee,
+    deleteEmployee(id: ID!): Employee
+}
