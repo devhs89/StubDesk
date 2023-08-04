@@ -15,3 +15,7 @@ Start of Assignment 2
 #### 2023 July 18
 
 End of Assignment 2
+
+#### 2023 August 04
+
+Start of Group Project (Group 5)
