@@ -87,8 +87,12 @@ class Employee extends Component {
   deleteBtnHandler() {
     // delete employee by id API call, and if successful, navigate back to employee directory
     fetchDeleteEmployeeById(this.state.empDetails._id ?? window.location.href.split('/').pop()).then(resp => {
-      if (resp?.data?.deleteEmployee?.firstName) this.toEmployeeDirectory(resp.data.deleteEmployee.firstName, resp.data.deleteEmployee.lastName);
+      if (resp?.data?.deleteEmployee?.firstName) return this.toEmployeeDirectory(resp.data.deleteEmployee.firstName, resp.data.deleteEmployee.lastName);
+      const {formErrors, formSuccess} = apiErrorHandler(resp?.errors);
+      this.setState({formErrors: formErrors});
+      this.setState({formSuccess: formSuccess});
     });
+    this.scrollToTop();
   }
 
   render() {

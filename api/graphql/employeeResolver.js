@@ -5,6 +5,10 @@ const {
 const path = require("path");
 const fs = require("fs");
 
+const customError = ({sCode = 500, msgs = ['Internal Server Error']}) => new Error(JSON.stringify({
+  code: sCode, message: msgs
+}));
+
 // get employee graph schema from file and define type and queries
 const empGraphPath = path.resolve(__dirname, 'employee.graphql');
 const typeDefs = fs.readFileSync(empGraphPath, 'utf-8');
@@ -23,10 +27,6 @@ const resolvers = {
   }, Mutation: {
     addEmployee: async (_, {payload}) => {
       const errsList = [];
-      const customError = ({sCode = 500, msgs = ['Internal Server Error']}) => new Error(JSON.stringify({
-        code: sCode, message: msgs
-      }));
-
       // validate inputs before creating new employee
       try {
         const params = JSON.parse(payload);
@@ -47,10 +47,6 @@ const resolvers = {
       }
     }, updateEmployee: async (_, {payload}) => {
       const errsList = [];
-      const customError = ({sCode = 500, msgs = ['Internal Server Error']}) => new Error(JSON.stringify({
-        code: sCode, message: msgs
-      }));
-
       const updateFields = {};
 
       // validate updated fields
@@ -66,7 +62,15 @@ const resolvers = {
       } catch (e) {
         return e.message;
       }
-    }, deleteEmployee: async (_, {id}) => EmployeeModel.findByIdAndDelete(id)
+    }, deleteEmployee: async (_, {id}) => {
+      const employee = await EmployeeModel.findById(id).exec();
+      // if employee's current working status is active, return error
+      if (employee?.currentStatus === 'working') return customError({
+        sCode: 403,
+        msgs: ['CAN’T DELETE EMPLOYEE – STATUS ACTIVE']
+      });
+      return await EmployeeModel.findByIdAndDelete(id).exec();
+    }
   }
 };
 
