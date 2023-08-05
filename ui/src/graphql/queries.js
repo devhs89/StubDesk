@@ -1,5 +1,5 @@
 // graphql queries
-export const allEmployeesQuery = 'query AllEmployeesQuery($employeeType: String) {allEmployees(employeeType: $employeeType) {_id firstName lastName age hireDate jobTitle department employeeType currentStatus}}';
+export const allEmployeesQuery = 'query AllEmployeesQuery($conditions: String) {allEmployees(conditions: $conditions) {_id firstName lastName age hireDate jobTitle department employeeType currentStatus}}';
 export const employeeByIdQuery = 'query EmployeeById($id: ID!) {employeeById(id: $id) {_id firstName lastName age hireDate jobTitle department employeeType currentStatus}}';
 export const createEmployeeMutation = 'mutation CreateEmployeeMutation($payload: String!) {addEmployee(payload: $payload) {_id firstName lastName age hireDate jobTitle department employeeType currentStatus}}';
 export const updateEmployeeMutation = 'mutation UpdateEmployeeMutation($payload: String!) {updateEmployee(payload: $payload){_id firstName lastName age hireDate jobTitle department employeeType currentStatus}}';

@@ -8,8 +8,11 @@ import {
 
 // all API calls
 
-export const fetchEmployees = async (empType = null) => {
-  const payload = empType ? {query: allEmployeesQuery, variables: {employeeType: empType}} : {query: allEmployeesQuery};
+export const fetchEmployees = async (filters = {}) => {
+  const payload = filters ? {
+    query: allEmployeesQuery,
+    variables: {conditions: JSON.stringify(filters)}
+  } : {query: allEmployeesQuery};
 
   return await fetch('/graphql', {
     method: 'POST', headers: {

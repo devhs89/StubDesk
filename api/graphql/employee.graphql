@@ -11,7 +11,7 @@ type Employee {
 }
 
 type Query {
-    allEmployees(employeeType: String): [Employee],
+    allEmployees(conditions: String): [Employee],
     employeeById(id: ID!): Employee
 }
 

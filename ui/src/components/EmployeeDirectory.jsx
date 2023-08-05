@@ -13,10 +13,10 @@ export class EmployeeDirectory extends Component {
     this.getEmployees = this.getEmployees.bind(this);
   }
 
-  getEmployees(filter = null) {
+  getEmployees(filter = {}) {
     // all or filtered employees API call
-    const dataPromise = fetchEmployees(filter?.target.value);
-    dataPromise.then(obj => this.setState({employees: obj.data.allEmployees}));
+    const dataPromise = fetchEmployees(filter);
+    dataPromise.then(obj => this.setState(obj.data.allEmployees && {employees: obj.data.allEmployees}));
   }
 
   getUrlParams() {
@@ -47,7 +47,7 @@ export class EmployeeDirectory extends Component {
           <InputGroup className="w-md-50 w-lg-25 ms-auto">
             <InputGroup.Text id=" employeeTable_empTypesSelect">Filter by</InputGroup.Text>
             <Form.Select aria-label=" Select Employee Type" className="text-capitalize" defaultValue=" all"
-                         onChange={this.getEmployees}>
+                         onChange={(evt) => this.getEmployees({employeeType: evt.target?.value})}>
               <option value="all">All</option>
               {this.empTypes.map((et, dex) => (<option key={dex} value={et} className="text-capitalize">{et}</option>))}
             </Form.Select>

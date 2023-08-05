@@ -16,10 +16,23 @@ const typeDefs = fs.readFileSync(empGraphPath, 'utf-8');
 // define resolvers for queries and mutations
 const resolvers = {
   Query: {
-    allEmployees: async (_, {employeeType}) => {
+    allEmployees: async (_, {conditions}) => {
+      // parse conditions
+      const parsedConditions = JSON.parse(conditions);
+      const filters = {};
+      // get valid filters
+      if (parsedConditions) {
+        if (validName(parsedConditions.firstName)) filters.firstName = parsedConditions.firstName;
+        if (validName(parsedConditions.lastName)) filters.lastName = parsedConditions.lastName;
+        if (validAge(parsedConditions.age)) filters.age = parsedConditions.age;
+        if (validHireDate(parsedConditions.hireDate)) filters.hireDate = parsedConditions.hireDate;
+        if (validJobTitle(parsedConditions.jobTitle)) filters.jobTitle = parsedConditions.jobTitle;
+        if (validDepartment(parsedConditions.department)) filters.department = parsedConditions.department;
+        if (validEmployeeType(parsedConditions.employeeType)) filters.employeeType = parsedConditions.employeeType;
+        if (validCurrentStatus(parsedConditions.currentStatus)) filters.currentStatus = parsedConditions.currentStatus;
+      }
       // get all or filtered employees
-      const filter = ['full-time', 'part-time', 'contract', 'seasonal'].includes(employeeType);
-      return await EmployeeModel.find(filter ? {employeeType: employeeType} : {}).exec();
+      return await EmployeeModel.find(filters).exec();
     }, employeeById: async (_, {id}) => {
       // find employee by provided id
       return await EmployeeModel.findById(id).exec();
@@ -66,8 +79,7 @@ const resolvers = {
       const employee = await EmployeeModel.findById(id).exec();
       // if employee's current working status is active, return error
       if (employee?.currentStatus === 'working') return customError({
-        sCode: 403,
-        msgs: ['CAN’T DELETE EMPLOYEE – STATUS ACTIVE']
+        sCode: 403, msgs: ['CAN’T DELETE EMPLOYEE – STATUS ACTIVE']
       });
       return await EmployeeModel.findByIdAndDelete(id).exec();
     }
