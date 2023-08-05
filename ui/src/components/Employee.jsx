@@ -124,11 +124,12 @@ class Employee extends Component {
           <Form.Control type="text" placeholder="Your last name" defaultValue={this.state.empDetails.lastName} disabled
                         readOnly />
         </Form.Group>
-        <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_age">
-          <Form.Label>Age</Form.Label>
-          <Form.Control type="text" placeholder="Your age" defaultValue={this.state.empDetails.age} disabled readOnly />
+        <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_dob">
+          <Form.Label>Date of Birth</Form.Label>
+          <Form.Control type="text" placeholder="Date of birth" defaultValue={this.state.empDetails.dob} disabled
+                        readOnly />
         </Form.Group>
-        <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_age">
+        <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_hireDate">
           <Form.Label>Hire Date</Form.Label>
           <Form.Control type="text" placeholder="Hired on" defaultValue={this.state.empDetails.hireDate} disabled
                         readOnly />

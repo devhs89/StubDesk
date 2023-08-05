@@ -20,7 +20,7 @@ class EmployeeTable extends Component {
           <thead>
           <tr>
             <th scope={"col"}>Full Name</th>
-            <th scope={"col"}>Age</th>
+            <th scope={"col"}>Dob</th>
             <th scope={"col"}>Title</th>
             <th scope={"col"}>Department</th>
             <th scope={"col"}>Type</th>
@@ -32,13 +32,13 @@ class EmployeeTable extends Component {
           {this.props.employees.map((emp, dex) => (
             <tr key={dex} role="button" onClick={() => this.toEmployeeDetail(emp._id)}>
               <th scope={"row"}>{emp.firstName} {emp.lastName}</th>
-              <td>{emp.age}</td>
+              <td>{emp.dob}</td>
               <td className={emp.jobTitle === 'vp' ? "text-uppercase" : "text-capitalize"}>{emp.jobTitle}</td>
               <td
                 className={(emp.department === 'it' || emp.department === 'hr') ? "text-uppercase" : "text-capitalize"}>{emp.department}</td>
               <td className={"text-capitalize"}>{emp.employeeType}</td>
               <td className={"text-capitalize"}>{emp.currentStatus}</td>
-              <td>{new Date(emp.hireDate).toLocaleDateString()}</td>
+              <td>{emp.hireDate}</td>
             </tr>))}
           </tbody>
         </Table>

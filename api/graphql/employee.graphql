@@ -2,7 +2,7 @@ type Employee {
     _id: ID
     firstName: String
     lastName: String
-    age: String
+    dob: String
     hireDate: String
     jobTitle: String
     department: String

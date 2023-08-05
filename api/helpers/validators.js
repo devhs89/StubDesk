@@ -5,9 +5,21 @@ const validName = (val) => {
   return new RegExp('^[a-zA-Z]+(([\',. -][a-zA-Z ])?[a-zA-Z]*)*$').test(val);
 };
 
-const validAge = (val) => {
+const validDobDate = (val) => {
   if (!val) return false;
-  return !Number.isNaN(+val) && (+val >= 20 && +val <= 65);
+  const splitDate = val.split(new RegExp('[-/]'));
+  if (splitDate.length < 3) return false;
+  const monthDex = +splitDate[1] - 1 < 0 ? 11 : +splitDate[1] - 1;
+  const parsedDob = new Date(splitDate[0], monthDex, splitDate[2]);
+  if (Number.isNaN(parsedDob.valueOf())) return false;
+  const todayDate = new Date();
+  let diffInYears = todayDate.getFullYear() - parsedDob.getFullYear();
+
+  // Adjust years if the today month and day are before the birth month and day
+  if (todayDate.getMonth() < parsedDob.getMonth() || (todayDate.getMonth() === parsedDob.getMonth() && todayDate.getDate() < parsedDob.getDate())) {
+    diffInYears--;
+  }
+  return diffInYears >= 20 && diffInYears <= 70;
 };
 
 const validJobTitle = (val) => {
@@ -36,5 +48,5 @@ const validCurrentStatus = (val) => {
 };
 
 module.exports = {
-  validName, validAge, validJobTitle, validDepartment, validEmployeeType, validHireDate, validCurrentStatus
+  validName, validDobDate, validJobTitle, validDepartment, validEmployeeType, validHireDate, validCurrentStatus
 };

@@ -1,6 +1,6 @@
 const EmployeeModel = require("../models/EmployeeModel");
 const {
-  validName, validAge, validHireDate, validJobTitle, validDepartment, validEmployeeType, validCurrentStatus
+  validName, validDobDate, validHireDate, validJobTitle, validDepartment, validEmployeeType, validCurrentStatus
 } = require("../helpers/validators");
 const path = require("path");
 const fs = require("fs");
@@ -24,7 +24,7 @@ const resolvers = {
       if (parsedConditions) {
         if (validName(parsedConditions.firstName)) filters.firstName = parsedConditions.firstName;
         if (validName(parsedConditions.lastName)) filters.lastName = parsedConditions.lastName;
-        if (validAge(parsedConditions.age)) filters.age = parsedConditions.age;
+        if (validDobDate(parsedConditions.dob)) filters.dob = parsedConditions.dob;
         if (validHireDate(parsedConditions.hireDate)) filters.hireDate = parsedConditions.hireDate;
         if (validJobTitle(parsedConditions.jobTitle)) filters.jobTitle = parsedConditions.jobTitle;
         if (validDepartment(parsedConditions.department)) filters.department = parsedConditions.department;
@@ -45,7 +45,7 @@ const resolvers = {
         const params = JSON.parse(payload);
         if (!validName(params.firstName)) errsList.push('Invalid first name');
         if (!validName(params.lastName)) errsList.push('Invalid last name');
-        if (!validAge(params.age)) errsList.push('Invalid age');
+        if (!validDobDate(params.dob)) errsList.push('Employee age must be between 20 and 70 inclusively');
         if (!validHireDate(params.hireDate)) errsList.push('Invalid hire date');
         if (!validJobTitle(params.jobTitle)) errsList.push('Invalid job title');
         if (!validDepartment(params.department)) errsList.push('Invalid department');
