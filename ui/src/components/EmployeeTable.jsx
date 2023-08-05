@@ -31,7 +31,7 @@ class EmployeeTable extends Component {
           <tbody className={"table-group-divider"}>
           {this.props.employees.map((emp, dex) => (
             <tr key={dex} role="button" onClick={() => this.toEmployeeDetail(emp._id)}>
-              <th scope={"row"}>{emp.firstName} {emp.lastName}</th>
+              <th scope={"row"} className="text-capitalize">{emp.firstName} {emp.lastName}</th>
               <td>{emp.dob}</td>
               <td className={emp.jobTitle === 'vp' ? "text-uppercase" : "text-capitalize"}>{emp.jobTitle}</td>
               <td

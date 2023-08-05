@@ -4,6 +4,7 @@ import {Home} from "./Home.jsx";
 import {EmployeeDirectory} from "./EmployeeDirectory.jsx";
 import Employee from "./Employee.jsx";
 import {EmployeeCreate} from "./EmployeeCreate.jsx";
+import {UpComingRetirement} from "./UpComingRetirement.jsx";
 
 class Page404 extends React.Component {
   // Error 404 page for unidentified routes
@@ -26,6 +27,7 @@ export class AppRouter extends React.Component {
         <Route path={'create'} Component={EmployeeCreate}></Route>
         <Route path={':id'} Component={Employee}></Route>
       </Route>
+      <Route path={'retirements'} Component={UpComingRetirement}></Route>
       <Route path="/" element={<Navigate replace to={'/home'} />}></Route>
       <Route path="*" Component={Page404}></Route>
     </Routes>);

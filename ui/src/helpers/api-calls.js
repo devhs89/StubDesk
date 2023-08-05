@@ -3,6 +3,7 @@ import {
   createEmployeeMutation,
   deleteEmployeeMutation,
   employeeByIdQuery,
+  nearRetirementQuery,
   updateEmployeeMutation
 } from "../graphql/queries";
 
@@ -13,6 +14,16 @@ export const fetchEmployees = async (filters = {}) => {
     query: allEmployeesQuery,
     variables: {conditions: JSON.stringify(filters)}
   } : {query: allEmployeesQuery};
+
+  return await fetch('/graphql', {
+    method: 'POST', headers: {
+      'Content-Type': 'application/json',
+    }, body: JSON.stringify(payload)
+  }).then(resp => resp.json());
+};
+
+export const fetchNearRetirements = async () => {
+  const payload = {query: nearRetirementQuery};
 
   return await fetch('/graphql', {
     method: 'POST', headers: {

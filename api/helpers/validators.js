@@ -1,5 +1,6 @@
-// all validators
+const {CalculateYears, ExtractDateParams} = require("./date-parser");
 
+// all validators
 const validName = (val) => {
   if (!val) return false;
   return new RegExp('^[a-zA-Z]+(([\',. -][a-zA-Z ])?[a-zA-Z]*)*$').test(val);
@@ -7,19 +8,10 @@ const validName = (val) => {
 
 const validDobDate = (val) => {
   if (!val) return false;
-  const splitDate = val.split(new RegExp('[-/]'));
-  if (splitDate.length < 3) return false;
-  const monthDex = +splitDate[1] - 1 < 0 ? 11 : +splitDate[1] - 1;
-  const parsedDob = new Date(splitDate[0], monthDex, splitDate[2]);
-  if (Number.isNaN(parsedDob.valueOf())) return false;
-  const todayDate = new Date();
-  let diffInYears = todayDate.getFullYear() - parsedDob.getFullYear();
-
-  // Adjust years if the today month and day are before the birth month and day
-  if (todayDate.getMonth() < parsedDob.getMonth() || (todayDate.getMonth() === parsedDob.getMonth() && todayDate.getDate() < parsedDob.getDate())) {
-    diffInYears--;
-  }
-  return diffInYears >= 20 && diffInYears <= 70;
+  const extractedDate = ExtractDateParams(val);
+  const parsedDob = new Date(extractedDate.fullYear, extractedDate.monDex, extractedDate.dt);
+  const currentAge = CalculateYears(parsedDob);
+  return currentAge >= 20 && currentAge <= 70;
 };
 
 const validJobTitle = (val) => {

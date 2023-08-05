@@ -4,6 +4,7 @@ const {
 } = require("../helpers/validators");
 const path = require("path");
 const fs = require("fs");
+const {ExtractDateParams, CalculateRetirementDate} = require("../helpers/date-parser");
 
 const customError = ({sCode = 500, msgs = ['Internal Server Error']}) => new Error(JSON.stringify({
   code: sCode, message: msgs
@@ -36,6 +37,17 @@ const resolvers = {
     }, employeeById: async (_, {id}) => {
       // find employee by provided id
       return await EmployeeModel.findById(id).exec();
+    }, nearRetirement: async () => {
+      // get all working employees
+      const activeEmployees = await EmployeeModel.find({currentStatus: 'working'}).exec();
+      // sort employees according to closest retirement date
+      return activeEmployees.sort((emp1, emp2) => {
+        const emp1ExtractedDate = ExtractDateParams(emp1.retirementDate);
+        const emp2ExtractedDate = ExtractDateParams(emp2.retirementDate);
+        const emp1ParsedDob = new Date(emp1ExtractedDate.fullYear, emp1ExtractedDate.monDex, emp1ExtractedDate.dt);
+        const emp2ParsedDob = new Date(emp2ExtractedDate.fullYear, emp2ExtractedDate.monDex, emp2ExtractedDate.dt);
+        return emp1ParsedDob - emp2ParsedDob;
+      });
     }
   }, Mutation: {
     addEmployee: async (_, {payload}) => {
@@ -52,6 +64,11 @@ const resolvers = {
         if (!validEmployeeType(params.employeeType)) errsList.push('Invalid employee type');
         if (!validCurrentStatus(params.currentStatus)) errsList.push('Invalid current status');
         if (errsList.length > 0) return customError({sCode: 400, msgs: errsList});
+
+        // calculate retirement date
+        const extractedDate = ExtractDateParams(params.dob);
+        const parsedDob = new Date(extractedDate.fullYear, extractedDate.monDex, extractedDate.dt);
+        params.retirementDate = CalculateRetirementDate(parsedDob).toISOString().substring(0, 10);
 
         // create new employee
         return await EmployeeModel.create(params);
