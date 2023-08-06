@@ -115,13 +115,15 @@ class Employee extends Component {
       <Form className="row text-start" onSubmit={this.updateEmployeeHandler}>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_firstName">
           <Form.Label>Firstname</Form.Label>
-          <Form.Control type="text" placeholder="Your first name" defaultValue={this.state.empDetails.firstName} className="text-capitalize"
+          <Form.Control type="text" placeholder="Your first name" defaultValue={this.state.empDetails.firstName}
+                        className="text-capitalize"
                         disabled
                         readOnly />
         </Form.Group>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_lastName">
           <Form.Label>Lastname</Form.Label>
-          <Form.Control type="text" placeholder="Your last name" defaultValue={this.state.empDetails.lastName} disabled className="text-capitalize"
+          <Form.Control type="text" placeholder="Your last name" defaultValue={this.state.empDetails.lastName} disabled
+                        className="text-capitalize"
                         readOnly />
         </Form.Group>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_dob">
@@ -136,7 +138,8 @@ class Employee extends Component {
         </Form.Group>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_employeeType">
           <Form.Label>Employee Type</Form.Label>
-          <Form.Control type="text" placeholder="Your employment type" defaultValue={this.state.empDetails.employeeType} className="text-capitalize"
+          <Form.Control type="text" placeholder="Your employment type" defaultValue={this.state.empDetails.employeeType}
+                        className="text-capitalize"
                         disabled readOnly />
         </Form.Group>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_jobTitle">
