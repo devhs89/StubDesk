@@ -1,26 +1,25 @@
 import Button from "react-bootstrap/Button";
 import {Component} from "react";
-import {employee} from "../dtos/employee";
 import {fetchCreateEmployee} from "../helpers/api-calls";
 import {apiErrorHandler} from "../helpers/error-handler";
 
 export class EmployeeCreate extends Component {
+  defaultState = {
+    formErrors: [],
+    formSuccess: false,
+    firstName: '',
+    lastName: '',
+    dob: new Date().toISOString().slice(0, 10),
+    jobTitle: 'employee',
+    department: 'it',
+    employeeType: 'seasonal',
+    hireDate: new Date().toISOString().slice(0, 10),
+    currentStatus: 'working'
+  };
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      formErrors: [],
-      formSuccess: false,
-      firstName: '',
-      lastName: '',
-      age: '',
-      jobTitle: 'employee',
-      department: 'it',
-      employeeType: 'seasonal',
-      hireDate: new Date().toISOString().slice(0, 10),
-      currentStatus: 'working'
-    };
+    this.state = this.defaultState;
 
     this.changeHandler = this.changeHandler.bind(this);
     this.createEmployeeRequest = this.createEmployeeRequest.bind(this);
@@ -38,8 +37,8 @@ export class EmployeeCreate extends Component {
       case "lastName":
         this.setState({lastName: val});
         break;
-      case "age":
-        this.setState({age: val});
+      case "dob":
+        this.setState({dob: new Date(val).toISOString().slice(0, 10)});
         break;
       case "jobTitle":
         this.setState({jobTitle: val});
@@ -62,12 +61,12 @@ export class EmployeeCreate extends Component {
   };
 
   createEmployeeRequest = (evt) => {
-    // crete employee with provied fields
+    // crete employee with provided fields
     evt.preventDefault();
     const payload = {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
-      age: this.state.age,
+      dob: this.state.dob,
       jobTitle: this.state.jobTitle,
       department: this.state.department,
       employeeType: this.state.employeeType,
@@ -78,18 +77,9 @@ export class EmployeeCreate extends Component {
     // create employee API call
     fetchCreateEmployee(payload).then(resp => {
       if (resp?.data?.addEmployee?._id) {
-        this.setState({
-          formErrors: [],
-          formSuccess: true,
-          firstName: '',
-          lastName: '',
-          age: '',
-          jobTitle: 'employee',
-          department: 'it',
-          employeeType: 'seasonal',
-          hireDate: new Date().toISOString().slice(0, 10),
-          currentStatus: 'working'
-        });
+        this.defaultState.formErrors = [];
+        this.defaultState.formSuccess = true;
+        this.setState(this.defaultState);
         evt.target.reset();
       } else {
         const {formErrors, formSuccess} = apiErrorHandler(resp?.errors);
@@ -130,13 +120,13 @@ export class EmployeeCreate extends Component {
                  defaultValue={this.state.lastName}
                  onChange={this.changeHandler} />
         </div>
-        <div className="col-12 col-md-2 mb-3">
-          <label htmlFor="age" className="form-label">Age</label>
-          <input type="number" className="form-control" id="age" placeholder="e.g. 23"
-                 defaultValue={this.state.age}
+        <div className="col-12 col-md-4 mb-3">
+          <label htmlFor="dob" className="form-label">Date of Birth</label>
+          <input type="date" className="form-control" id="dob" placeholder="e.g. yyyy/mm/dd"
+                 defaultValue={this.state.dob}
                  onChange={this.changeHandler} />
         </div>
-        <div className="col-12 col-md-5 mb-3">
+        <div className="col-12 col-md-4 mb-3">
           <label htmlFor="jobTitle" className="form-label">Title</label>
           <select id="jobTitle" className="form-select" defaultValue={this.state.jobTitle}
                   onChange={this.changeHandler}>
@@ -146,7 +136,7 @@ export class EmployeeCreate extends Component {
             <option value="vp">Vice President</option>
           </select>
         </div>
-        <div className="col-12 col-md-5 mb-3">
+        <div className="col-12 col-md-4 mb-3">
           <label htmlFor="department" className="form-label">Department</label>
           <select id="department" className="form-select" defaultValue={this.state.department}
                   onChange={this.changeHandler}>

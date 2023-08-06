@@ -87,8 +87,12 @@ class Employee extends Component {
   deleteBtnHandler() {
     // delete employee by id API call, and if successful, navigate back to employee directory
     fetchDeleteEmployeeById(this.state.empDetails._id ?? window.location.href.split('/').pop()).then(resp => {
-      if (resp?.data?.deleteEmployee?.firstName) this.toEmployeeDirectory(resp.data.deleteEmployee.firstName, resp.data.deleteEmployee.lastName);
+      if (resp?.data?.deleteEmployee?.firstName) return this.toEmployeeDirectory(resp.data.deleteEmployee.firstName, resp.data.deleteEmployee.lastName);
+      const {formErrors, formSuccess} = apiErrorHandler(resp?.errors);
+      this.setState({formErrors: formErrors});
+      this.setState({formSuccess: formSuccess});
     });
+    this.scrollToTop();
   }
 
   render() {
@@ -112,19 +116,22 @@ class Employee extends Component {
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_firstName">
           <Form.Label>Firstname</Form.Label>
           <Form.Control type="text" placeholder="Your first name" defaultValue={this.state.empDetails.firstName}
+                        className="text-capitalize"
                         disabled
                         readOnly />
         </Form.Group>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_lastName">
           <Form.Label>Lastname</Form.Label>
           <Form.Control type="text" placeholder="Your last name" defaultValue={this.state.empDetails.lastName} disabled
+                        className="text-capitalize"
                         readOnly />
         </Form.Group>
-        <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_age">
-          <Form.Label>Age</Form.Label>
-          <Form.Control type="text" placeholder="Your age" defaultValue={this.state.empDetails.age} disabled readOnly />
+        <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_dob">
+          <Form.Label>Date of Birth</Form.Label>
+          <Form.Control type="text" placeholder="Date of birth" defaultValue={this.state.empDetails.dob} disabled
+                        readOnly />
         </Form.Group>
-        <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_age">
+        <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_hireDate">
           <Form.Label>Hire Date</Form.Label>
           <Form.Control type="text" placeholder="Hired on" defaultValue={this.state.empDetails.hireDate} disabled
                         readOnly />
@@ -132,6 +139,7 @@ class Employee extends Component {
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_employeeType">
           <Form.Label>Employee Type</Form.Label>
           <Form.Control type="text" placeholder="Your employment type" defaultValue={this.state.empDetails.employeeType}
+                        className="text-capitalize"
                         disabled readOnly />
         </Form.Group>
         <Form.Group className="col-md-6 mb-3" controlId="employeeDetail_jobTitle">

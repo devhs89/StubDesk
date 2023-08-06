@@ -16,6 +16,8 @@ export class AppNavbar extends Component {
                      to="/home">Home</NavLink>
             <NavLink to="/employee/directory"
                      className={({isActive}) => isActive ? 'nav-link active' : 'nav-link inactive'}>Employees</NavLink>
+            <NavLink to="/retirements"
+                     className={({isActive}) => isActive ? 'nav-link active' : 'nav-link inactive'}>Retirements</NavLink>
           </Nav>
         </Navbar.Collapse>
       </Container>

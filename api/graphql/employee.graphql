@@ -2,8 +2,9 @@ type Employee {
     _id: ID
     firstName: String
     lastName: String
-    age: String
+    dob: String
     hireDate: String
+    retirementDate: String
     jobTitle: String
     department: String
     employeeType: String
@@ -11,8 +12,9 @@ type Employee {
 }
 
 type Query {
-    allEmployees(employeeType: String): [Employee],
-    employeeById(id: ID!): Employee
+    allEmployees(conditions: String): [Employee],
+    employeeById(id: ID!): Employee,
+    upComingRetirement(conditions: String): [Employee]
 }
 
 type Mutation {

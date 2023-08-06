@@ -6,8 +6,8 @@ export const appNavigator = (Component) => {
     const navigate = useNavigate();
 
     return (<Component
-        navigate={navigate}
-        {...props}
-      />);
+      navigate={navigate}
+      {...props}
+    />);
   };
 };
