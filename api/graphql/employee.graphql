@@ -14,7 +14,7 @@ type Employee {
 type Query {
     allEmployees(conditions: String): [Employee],
     employeeById(id: ID!): Employee,
-    nearRetirement: [Employee]
+    upComingRetirement(conditions: String): [Employee]
 }
 
 type Mutation {

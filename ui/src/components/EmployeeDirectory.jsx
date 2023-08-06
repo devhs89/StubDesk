@@ -49,12 +49,7 @@ export class EmployeeDirectory extends Component {
             <Form.Select aria-label=" Select Employee Type" className="text-capitalize" defaultValue=" all"
                          onChange={(evt) => this.getEmployees({employeeType: evt.target?.value})}>
               <option value="all">All</option>
-              <optgroup label="Status">
-                <option value="retirements">Retirements</option>
-              </optgroup>
-              <optgroup label="Types">
-                {this.empTypes.map((et, dex) => (<option key={dex} value={et} className="text-capitalize">{et}</option>))}
-              </optgroup>
+              {this.empTypes.map((et, dex) => (<option key={dex} value={et} className="text-capitalize">{et}</option>))}
             </Form.Select>
           </InputGroup>
         </Col>

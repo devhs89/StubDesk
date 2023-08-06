@@ -37,14 +37,33 @@ const resolvers = {
     }, employeeById: async (_, {id}) => {
       // find employee by provided id
       return await EmployeeModel.findById(id).exec();
-    }, nearRetirement: async () => {
+    }, upComingRetirement: async (_, {conditions}) => {
+      // parse conditions
+      const parsedFilters = JSON.parse(conditions);
+      const defaultFilter = {currentStatus: 'working'};
+      let filters;
+      // get valid filters
+      if (parsedFilters && Object.keys(parsedFilters).length > 0) {
+        if ((parsedFilters.fullTime && parsedFilters.partTime && parsedFilters.contract && parsedFilters.seasonal) || (!parsedFilters.fullTime && !parsedFilters.partTime && !parsedFilters.contract && !parsedFilters.seasonal)) {
+          filters = defaultFilter;
+        } else {
+          const orFilters = [];
+          if (parsedFilters.fullTime) orFilters.push({employeeType: parsedFilters.fullTime});
+          if (parsedFilters.partTime) orFilters.push({employeeType: parsedFilters.partTime});
+          if (parsedFilters.contract) orFilters.push({employeeType: parsedFilters.contract});
+          if (parsedFilters.seasonal) orFilters.push({employeeType: parsedFilters.seasonal});
+          filters = {$and: [defaultFilter, {$or: orFilters}]};
+        }
+      } else {
+        filters = defaultFilter;
+      }
       const currentDate = new Date();
       const sixMonthsFromNow = new Date();
       sixMonthsFromNow.setMonth(sixMonthsFromNow.getMonth() + 6);
       // get all working employees
-      const activeEmployees = await EmployeeModel.find({currentStatus: 'working'}).exec();
+      const activeEmployees = await EmployeeModel.find(filters).exec();
       // filter retirement dates
-      const upcomingRetirees = activeEmployees.filter((emp, dex, activeEmployees) => {
+      const upcomingRetirees = activeEmployees.filter((emp) => {
         const dateParams = ExtractDateParams(emp.retirementDate);
         const parsedRtDate = new Date(dateParams.fullYear, dateParams.monDex, dateParams.dt);
         return parsedRtDate >= currentDate && parsedRtDate <= sixMonthsFromNow;
