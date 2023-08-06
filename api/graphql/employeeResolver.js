@@ -38,15 +38,22 @@ const resolvers = {
       // find employee by provided id
       return await EmployeeModel.findById(id).exec();
     }, nearRetirement: async () => {
+      const currentDate = new Date();
+      const sixMonthsFromNow = new Date();
+      sixMonthsFromNow.setMonth(sixMonthsFromNow.getMonth() + 6);
       // get all working employees
       const activeEmployees = await EmployeeModel.find({currentStatus: 'working'}).exec();
+      // filter retirement dates
+      const upcomingRetirees = activeEmployees.filter((emp, dex, activeEmployees) => {
+        const dateParams = ExtractDateParams(emp.retirementDate);
+        const parsedRtDate = new Date(dateParams.fullYear, dateParams.monDex, dateParams.dt);
+        return parsedRtDate >= currentDate && parsedRtDate <= sixMonthsFromNow;
+      });
       // sort employees according to closest retirement date
-      return activeEmployees.sort((emp1, emp2) => {
-        const emp1ExtractedDate = ExtractDateParams(emp1.retirementDate);
-        const emp2ExtractedDate = ExtractDateParams(emp2.retirementDate);
-        const emp1ParsedDob = new Date(emp1ExtractedDate.fullYear, emp1ExtractedDate.monDex, emp1ExtractedDate.dt);
-        const emp2ParsedDob = new Date(emp2ExtractedDate.fullYear, emp2ExtractedDate.monDex, emp2ExtractedDate.dt);
-        return emp1ParsedDob - emp2ParsedDob;
+      return upcomingRetirees.sort((emp1, emp2) => {
+        if (emp1.retirementDate > emp2.retirementDate) return 1;
+        if (emp1.retirementDate < emp2.retirementDate) return -1;
+        return 0;
       });
     }
   }, Mutation: {
